@@ -437,6 +437,8 @@ struct ProviderThumbnailInfoTests {
 
         let a = BrowserViewController(services: left.services)
         let b = BrowserViewController(services: right.services)
+        a.columns.showsFilePreview = true
+        b.columns.showsFilePreview = true
         for browser in [a, b] {
             browser.view.frame = NSRect(x: 0, y: 0, width: 700, height: 500)
             browser.load(tree.url("provider"))

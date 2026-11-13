@@ -50,6 +50,7 @@ extension BrowserViewController {
             }
         }
         installActiveView()
+        reloadOutline()
         if !applyHeldListing() { pushContent() }
         guard navigationRevision == revision, effectiveMode == newMode else { return }
         select(selection)
@@ -90,7 +91,9 @@ extension BrowserViewController {
         guard let active = activeView else { return }
         let directory = isShowingResults ? nil : directory
         guard isShowingResults || directory != nil else { return }
-        let shown = visibleRows.flatMap { $0.groupTitle == nil ? [$0] : $0.children ?? [] }
+        rebuildGroups()
+        let contentRows = showsFolderGroups ? displayedRows : visibleRows
+        let shown = contentRows.flatMap { $0.groupTitle == nil ? [$0] : $0.children ?? [] }
         var matches: [URL: [Int]] = [:]
         for node in shown where !node.matchIndices.isEmpty { matches[node.url] = node.matchIndices }
         var details: FileCollectionDetails?
@@ -102,7 +105,8 @@ extension BrowserViewController {
             }
             details = FileCollectionDetails(groups: groups, copies: services.copies)
         }
-        let content = FileCollectionContent(complete: !loading.hasPartialListing, directory: directory, entries: shown.map(\.entry), matches: matches, details: details)
+        let sections = showsFolderGroups ? grouping.headers.map { FileCollectionGroup(title: $0.groupTitle ?? "", count: $0.children?.count ?? 0) } : []
+        let content = FileCollectionContent(groups: sections, complete: !loading.hasPartialListing, directory: directory, entries: shown.map(\.entry), matches: matches, details: details)
         let diskSizeReader: (@MainActor (FileEntry) -> DiskSizeMeasurement)?
         if directory == nil || directory.map(services.copies.contains) == true || directory.flatMap(ArchiveCache.archive(containing:)) != nil {
             diskSizeReader = nil
@@ -119,6 +123,8 @@ extension BrowserViewController {
                 guard entry.isDirectory else { return entry.size }
                 return canMeasure(entry) ? folderSize(entry.url, request: true)?.bytes : 0
             },
+            grouping: showsFolderGroups ? groupKey : nil,
+            groupAscending: ordering.choice?.ascending ?? true,
             sortedBy: ordering.snapshot,
             diskSize: diskSizeReader)
         active.apply(content, metadata: metadata, animated: animated)

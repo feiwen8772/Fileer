@@ -798,6 +798,8 @@ final class BrowserWindowController: NSWindowController, NSWindowDelegate {
 extension BrowserWindowController: NSMenuItemValidation {
     func validateMenuItem(_ item: NSMenuItem) -> Bool {
         switch item.action {
+        case #selector(groupFromToolbar(_:)): return !isClosed && window?.attachedSheet == nil && browser.validateGrouping(item)
+        case #selector(sortFromToolbar(_:)): return canSortFromToolbar(item)
         case #selector(syncViewMode(_:)):
             item.state = item.tag == browser.effectiveMode.rawValue ? .on : .off
             return BrowserViewMode(rawValue: item.tag).map(browser.supportsMode) ?? false

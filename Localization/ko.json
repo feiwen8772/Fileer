@@ -1928,6 +1928,7 @@
     "“%@”: %@": "‘%@’: %@",
     "← Copy": "← 복사",
     "↑↓ Choose   ↩ Go   ⇥ Complete   esc Close": "↑↓ 선택   ↩ 이동   ⇥ 완성   esc 닫기",
-    "✓ Full Disk Access is on. You’re all set.": "✓ 전체 디스크 접근 권한이 켜져 있습니다. 모든 준비가 완료되었습니다."
+    "✓ Full Disk Access is on. You’re all set.": "✓ 전체 디스크 접근 권한이 켜져 있습니다. 모든 준비가 완료되었습니다.",
+    "Use Groups": "그룹 사용"
   }
 }

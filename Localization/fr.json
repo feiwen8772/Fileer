@@ -2072,6 +2072,7 @@
     "“%@”: %@": "« %@ » : %@",
     "← Copy": "← Copier",
     "↑↓ Choose   ↩ Go   ⇥ Complete   esc Close": "↑↓ Choisir   ↩ Ouvrir   ⇥ Compléter   esc Fermer",
-    "✓ Full Disk Access is on. You’re all set.": "✓ L’accès complet au disque est activé. Tout est prêt."
+    "✓ Full Disk Access is on. You’re all set.": "✓ L’accès complet au disque est activé. Tout est prêt.",
+    "Use Groups": "Utiliser les groupes"
   }
 }

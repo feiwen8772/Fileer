@@ -44,6 +44,11 @@ fileprivate extension CGFloat {
 final class GridLayout: NSCollectionViewLayout {
     var metrics = GridMetrics(iconSize: 64, typography: .standard)
     var itemCount = 0
+    static let groupHeaderKind = "StrataGridGroupHeader"
+    var groups: [FileCollectionGroup] = []
+    private var groupedFrames: [NSRect] = []
+    private var headerFrames: [NSRect] = []
+    private var groupedHeight: CGFloat = 0
     var insets = NSEdgeInsets(top: 10, left: 14, bottom: 18, right: 14)
     var rowSpacing: CGFloat = 2
 
@@ -64,17 +69,34 @@ final class GridLayout: NSCollectionViewLayout {
         columns = max(1, Int(exactly: floor(proposedColumns)) ?? 1)
         cellWidth = floor(available / CGFloat(columns))
         lastWidth = width
+        groupedFrames = []; headerFrames = []; groupedHeight = 0
+        if !groups.isEmpty, groups.reduce(0, { $0 + $1.count }) == itemCount {
+            var y = insets.top
+            for group in groups {
+                headerFrames.append(NSRect(x: insets.left, y: y, width: available, height: 30))
+                y += 34
+                for index in 0..<group.count {
+                    groupedFrames.append(NSRect(x: insets.left + CGFloat(index % columns) * cellWidth,
+                                                y: y + CGFloat(index / columns) * (rowHeight + rowSpacing),
+                                                width: cellWidth, height: rowHeight))
+                }
+                let count = (group.count + columns - 1) / columns
+                y += CGFloat(count) * (rowHeight + rowSpacing) + 12
+            }
+            groupedHeight = y + insets.bottom
+        }
     }
 
     var rows: Int { itemCount == 0 ? 0 : (itemCount - 1) / columns + 1 }
     var rowHeight: CGFloat { metrics.itemHeight }
 
     override var collectionViewContentSize: NSSize {
-        let height = insets.top + CGFloat(rows) * rowHeight + CGFloat(max(rows - 1, 0)) * rowSpacing + insets.bottom
+        let height = groupedFrames.isEmpty ? insets.top + CGFloat(rows) * rowHeight + CGFloat(max(rows - 1, 0)) * rowSpacing + insets.bottom : groupedHeight
         return NSSize(width: width, height: height)
     }
 
     func frame(for index: Int) -> NSRect {
+        if groupedFrames.indices.contains(index) { return groupedFrames[index] }
         let row = index / columns, column = index % columns
         let available = width - insets.left - insets.right
         // Distribute leftover pixels from flooring evenly so the grid stays centered.
@@ -86,6 +108,9 @@ final class GridLayout: NSCollectionViewLayout {
 
     func index(at point: NSPoint) -> Int? {
         guard itemCount > 0, point.x.isFinite, point.y.isFinite else { return nil }
+        if !groupedFrames.isEmpty {
+            return indexes(in: NSRect(x: point.x, y: point.y, width: 1, height: 1)).first { groupedFrames[$0].contains(point) }
+        }
         let available = width - insets.left - insets.right
         let slack = max(available - cellWidth * CGFloat(columns), 0)
         let proposedColumn = floor((point.x - insets.left - (slack / 2).rounded(.down)) / cellWidth)
@@ -101,6 +126,17 @@ final class GridLayout: NSCollectionViewLayout {
     /// Items whose rows intersect `rect`.
     func indexes(in rect: NSRect) -> Range<Int> {
         guard itemCount > 0, !rect.isNull, !rect.minY.isNaN, !rect.maxY.isNaN else { return 0..<0 }
+        if !groupedFrames.isEmpty {
+            func boundary(_ predicate: (NSRect) -> Bool) -> Int {
+                var low = 0, high = groupedFrames.count
+                while low < high {
+                    let middle = (low + high) / 2
+                    if predicate(groupedFrames[middle]) { high = middle } else { low = middle + 1 }
+                }
+                return low
+            }
+            return boundary { $0.maxY >= rect.minY }..<boundary { $0.minY > rect.maxY }
+        }
         let pitch = rowHeight + rowSpacing
         let firstRow = floor((rect.minY - insets.top) / pitch)
         let lastRow = floor((rect.maxY - insets.top) / pitch)
@@ -114,7 +150,18 @@ final class GridLayout: NSCollectionViewLayout {
     }
 
     override func layoutAttributesForElements(in rect: NSRect) -> [NSCollectionViewLayoutAttributes] {
-        indexes(in: rect).map { attributes(for: $0) }
+        var result = indexes(in: rect).map { attributes(for: $0) }
+        for (index, frame) in headerFrames.enumerated() where frame.intersects(rect) {
+            if let header = layoutAttributesForSupplementaryView(ofKind: Self.groupHeaderKind, at: IndexPath(item: index, section: 0)) { result.append(header) }
+        }
+        return result
+    }
+
+    override func layoutAttributesForSupplementaryView(ofKind kind: NSCollectionView.SupplementaryElementKind, at indexPath: IndexPath) -> NSCollectionViewLayoutAttributes? {
+        guard kind == Self.groupHeaderKind, headerFrames.indices.contains(indexPath.item) else { return nil }
+        let attributes = NSCollectionViewLayoutAttributes(forSupplementaryViewOfKind: kind, with: indexPath)
+        attributes.frame = headerFrames[indexPath.item]
+        return attributes
     }
 
     override func layoutAttributesForItem(at indexPath: IndexPath) -> NSCollectionViewLayoutAttributes? {

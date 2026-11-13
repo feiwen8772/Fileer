@@ -59,6 +59,8 @@ enum MainMenu {
             .separator(),
             StrataCommand.moveToTrash.menuItem(),
             alternate(StrataCommand.deleteImmediately.menuItem()),
+            immediateDeleteAlias(key: String(UnicodeScalar(NSDeleteFunctionKey)!), id: "deleteImmediately:shiftForwardDelete"),
+            immediateDeleteAlias(key: "\u{8}", id: "deleteImmediately:shiftDelete"),
             StrataCommand.ejectVolume.menuItem(),
             .separator(),
             item("Close Window", #selector(NSWindow.performClose(_:)), "w"),
@@ -169,6 +171,14 @@ enum MainMenu {
     }
 
     /// A menu item that isn't shown but whose shortcut still works (⌘= for Bigger Icons on keyboards where + needs Shift).
+    static func immediateDeleteAlias(key: String, id: String) -> NSMenuItem {
+        let item = StrataCommand.deleteImmediately.menuItem()
+        item.keyEquivalent = key
+        item.keyEquivalentModifierMask = [.shift]
+        item.identifier = NSUserInterfaceItemIdentifier(id)
+        return hidden(item)
+    }
+
     private static func hidden(_ item: NSMenuItem) -> NSMenuItem {
         item.isHidden = true
         item.allowsKeyEquivalentWhenHidden = true
@@ -176,11 +186,12 @@ enum MainMenu {
     }
 
     /// Finder's Sort By shortcuts: ⌃⌥⌘1 Name, ⌃⌥⌘2 Kind, ⌃⌥⌘5 Date Modified, ⌃⌥⌘6 Date Created, ⌃⌥⌘7 Size.
-    private static func sortByMenu() -> NSMenuItem {
+    static func sortByMenu(target: AnyObject? = nil, withShortcuts: Bool = true) -> NSMenuItem {
         let titles: [(String.LocalizationValue, String)] = [("Name", "1"), ("Kind", "2"), ("Date Modified", "5"), ("Date Created", "6"), ("Size", "7"), ("Tags", "3")]
         let items = titles.enumerated().map { index, entry in
-            let menuItem = item(entry.0, #selector(BrowserViewController.sortBy(_:)), entry.1, [.command, .option, .control])
+            let menuItem = item(entry.0, #selector(BrowserViewController.sortBy(_:)), withShortcuts ? entry.1 : "", [.command, .option, .control])
             menuItem.tag = index
+            menuItem.target = target
             return menuItem
         }
         let sortBy = submenu("Sort By", items)

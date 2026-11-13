@@ -4,7 +4,7 @@ import AppKit
 final class BrowserToolbar {
     static let defaults: [NSToolbarItem.Identifier] = [
         .toggleSidebar, .sidebarMode, .sidebarTrackingSeparator, .back, .forward, .flexibleSpace, .pathBar,
-        .flexibleSpace, .viewMode, .dualPane, .share, .search, .transfers, .inspectorTrackingSeparator, .toggleInspector,
+        .flexibleSpace, .viewMode, .groupOrder, .sortOrder, .dualPane, .share, .search, .transfers, .inspectorTrackingSeparator, .toggleInspector,
     ]
     static let commands: [StrataCommand] = [
         .newFolder, .newFile, .moveToTrash, .copyToOtherPane, .moveToOtherPane, .compareWithOtherPane, .connectToServer,
@@ -66,6 +66,8 @@ final class BrowserToolbar {
         let ids: [NSToolbarItem.Identifier] = stored.map { NSToolbarItem.Identifier(rawValue: $0) }.filter {
             allowed.contains($0) && ($0 == .flexibleSpace || $0 == .space || seen.insert($0).inserted)
         }
+        if ids == defaults.filter({ $0 != .sortOrder && $0 != .groupOrder })
+            || ids == defaults.filter({ $0 != .groupOrder }) { return defaults }
         return !stored.isEmpty && ids.isEmpty ? nil : ids
     }
 
@@ -119,6 +121,7 @@ extension BrowserWindowController {
         guard !isClosed, let toolbar = window?.toolbar else { return }
         toolbar.isVisible = true
         if !toolbar.itemIdentifiers.contains(id) { toolbar.insertItem(withItemIdentifier: id, at: toolbar.items.count) }
+        window?.contentView?.superview?.layoutSubtreeIfNeeded()
     }
 
     func toolbarDidRemoveItem(_ notification: Notification) {

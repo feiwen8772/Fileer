@@ -81,7 +81,9 @@ identity="${STRATA_SIGNING_IDENTITY:-}"
 if [[ -z "$identity" ]]; then
   identity=$(security find-identity -v -p codesigning | sed -n 's/.*"\(Developer ID Application: [^"]*\)".*/\1/p' | head -1)
 fi
-sign=(--force --options runtime --sign "${identity:--}")
+sign=(--force --sign "${identity:--}")
+# Library validation requires a Team ID, which ad-hoc signatures do not have.
+if [[ -n "$identity" && "$identity" != "-" ]]; then sign+=(--options runtime); fi
 if [[ -n "${STRATA_KEYCHAIN:-}" ]]; then sign+=(--keychain "$STRATA_KEYCHAIN"); fi
 if [[ "${STRATA_TIMESTAMP:-}" == 1 && -n "$identity" ]]; then sign+=(--timestamp); fi
 # Inside out: Sparkle's helpers, then the framework, the command-line helper, the archive service, and the bundle that

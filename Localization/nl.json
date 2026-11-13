@@ -2072,6 +2072,7 @@
     "“%@”: %@": "“%@”: %@",
     "← Copy": "← Kopieer",
     "↑↓ Choose   ↩ Go   ⇥ Complete   esc Close": "↑↓ Kies   ↩ Ga   ⇥ Vul aan   esc Sluit",
-    "✓ Full Disk Access is on. You’re all set.": "✓ Volledige schijftoegang staat aan. Je bent klaar."
+    "✓ Full Disk Access is on. You’re all set.": "✓ Volledige schijftoegang staat aan. Je bent klaar.",
+    "Use Groups": "Gebruik groepen"
   }
 }

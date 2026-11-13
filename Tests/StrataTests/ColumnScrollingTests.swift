@@ -33,6 +33,7 @@ struct ColumnScrollingTests {
         let tree = try TestTree("a/b/c/note.txt")
         let scroll = RecordingScrollView()
         let columns = ColumnBrowserViewController(scrollView: scroll, directoryReader: testEnvironment.services.directories, preferences: preferences, thumbnails: testEnvironment.services.thumbnails, itemInfo: testEnvironment.services.itemInfo, copies: testEnvironment.services.copies, clipboard: testEnvironment.services.clipboard, statuses: try .isolated(), names: FolderNames(read: FolderNames.read))
+        columns.showsFilePreview = true
         columns.view.frame = NSRect(x: 0, y: 0, width: 500, height: 300)
         columns.setRoot(tree.root, entries: try await DirectoryLoader.load(tree.root, showHidden: false, copies: testEnvironment.services.copies).entries)
         columns.select([tree.url("a/b/c/note.txt")])
@@ -73,6 +74,7 @@ struct ColumnScrollingTests {
         try tree.add(files)
         let strip = RecordingScrollView()
         let columns = ColumnBrowserViewController(scrollView: strip, directoryReader: testEnvironment.services.directories, preferences: preferences, thumbnails: testEnvironment.services.thumbnails, itemInfo: testEnvironment.services.itemInfo, copies: testEnvironment.services.copies, clipboard: testEnvironment.services.clipboard, statuses: try .isolated(), names: FolderNames(read: FolderNames.read))
+        columns.showsFilePreview = true
         columns.view.frame = NSRect(x: 0, y: 0, width: 500, height: 300)
         columns.setRoot(tree.root, entries: try await DirectoryLoader.load(tree.root, showHidden: false, copies: testEnvironment.services.copies).entries)
         columns.select([tree.url("file-0.txt")])

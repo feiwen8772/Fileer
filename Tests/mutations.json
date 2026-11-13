@@ -1767,7 +1767,7 @@
   },
   {
     "file": "Strata/Browser/BrowserViewController.swift",
-    "find": "foldersFirst: { [weak self] in self?.preferences.foldersFirst ?? true },",
+    "find": "foldersFirst: { [weak self] in self?.preferences.foldersFirst ?? false },",
     "replace": "foldersFirst: { Prefs.shared.foldersFirst },",
     "rule": "Browser preferences deeper columns order folders by another windows setting",
     "tests": "BrowserPreferencesTests/deeperColumnsOrderFoldersByTheirOwnWindowsPreference"
@@ -2643,7 +2643,7 @@
   },
   {
     "file": "Strata/Browser/BrowserViewController.swift",
-    "find": "if changedParents.isEmpty, sorted.elementsEqual(rows, by: { $0 === $1 }) { return }",
+    "find": "if changedParents.isEmpty, sorted.elementsEqual(rows, by: { $0 === $1 }), !showsFolderGroups { return }",
     "replace": "if sorted.elementsEqual(rows, by: { $0 === $1 }) { return }",
     "rule": "Browser ordering native descendants refresh even when roots stay in place",
     "tests": "BrowserOrderingTests/metadataResortUpdatesNativeDescendantRowsAndKeepsSelection"
@@ -8593,8 +8593,8 @@
   },
   {
     "file": "Strata/Toolbar/BrowserToolbar.swift",
-    "find": ".flexibleSpace, .viewMode, .dualPane,",
-    "replace": ".flexibleSpace, .viewMode, identifier(.reloadFolder), .dualPane,",
+    "find": ".flexibleSpace, .viewMode, .groupOrder, .sortOrder, .dualPane,",
+    "replace": ".flexibleSpace, .viewMode, .groupOrder, .sortOrder, identifier(.reloadFolder), .dualPane,",
     "rule": "Optional Reload appears in the default toolbar without being added",
     "tests": "ToolbarCustomizationTests/reloadBelongsOnlyToTheCustomizationItems"
   },
@@ -9729,5 +9729,12 @@
     "replace": "        if isActivelyUpdating, isWithinIndexedScope(path) {\n            return .pending\n        }",
     "rule": "Unindexed paths under already-read parents return unindexed during background updates",
     "tests": "FolderSizerCancellationTests/unindexedPathsUnderAlreadyReadParentsReturnUnindexedDuringUpdating"
+  },
+  {
+    "file": "Strata/Views/ColumnPane.swift",
+    "find": "return node.groupTitle == nil ? node.entry : nil",
+    "replace": "return node.entry",
+    "rule": "Grouped column headers must never become selected or dragged files",
+    "tests": "BrowserGroupingTests/groupedColumnsMapHeadersAndDeeperSelectionsToTheirExactFiles|ToolbarCustomizationTests/toolbarTrashKeepsTheActivePanesExactSelectionInEveryViewAndUndoRestoresIt"
   }
 ]

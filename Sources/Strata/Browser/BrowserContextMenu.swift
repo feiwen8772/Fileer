@@ -114,6 +114,9 @@ struct BrowserContextMenu {
     }
 
     private func addBackgroundItems(to menu: NSMenu) {
+        menu.addItem(BrowserGrouping.menu(target: target))
+        menu.addItem(MainMenu.sortByMenu(target: target, withShortcuts: false))
+        menu.addItem(.separator())
         let hiddenFilesTitle = facts.showsHiddenFiles ? String(localized: "Hide Hidden Files") : String(localized: "Show Hidden Files")
         // On a server: a new folder there, or pasting onto it; a shell there (SFTP).
         if facts.isOnServer {

@@ -86,7 +86,13 @@ extension FileCollectionViewDelegate {
 }
 
 /// Sorted, filtered files for a presentation. Results have no destination folder; details identify their origins.
+struct FileCollectionGroup {
+    let title: String
+    let count: Int
+}
+
 struct FileCollectionContent {
+    var groups: [FileCollectionGroup] = []
     var complete = true
     let directory: URL?
     let entries: [FileEntry]
@@ -133,6 +139,8 @@ struct FileCollectionMetadata {
     let canMeasure: @MainActor (FileEntry) -> Bool
     let size: @MainActor (FileEntry) -> Int64?
     /// The same order, for folders sorted away from the main thread as they're read; nil when it can't be.
+    var grouping: BrowserGroupKey? = nil
+    var groupAscending = true
     var sortedBy: BrowserOrdering.Snapshot?
     var diskSize: (@MainActor (FileEntry) -> DiskSizeMeasurement)? = nil
 }

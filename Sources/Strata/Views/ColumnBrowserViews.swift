@@ -53,7 +53,7 @@ final class ColumnTableView: NSTableView {
 
     override func mouseDown(with event: NSEvent) {
         let url = ClickToRename.nameRow(in: self, column: 0, for: event).flatMap { row in
-            pane.flatMap { $0.entries.indices.contains(row) ? $0.entries[row].url : nil }
+            pane?.entry(at: row)?.url
         }
         super.mouseDown(with: event)
         clickToRename.clicked(event, armed: url != nil, in: self) { [weak self] in
@@ -109,9 +109,9 @@ final class ColumnTableView: NSTableView {
         clickToRename.cancel()
         let row = self.row(at: convert(event.locationInWindow, from: nil))
         window?.makeFirstResponder(self)
-        if row >= 0, !selectedRowIndexes.contains(row) {
+        if row >= 0, pane?.entry(at: row) != nil, !selectedRowIndexes.contains(row) {
             selectRowIndexes([row], byExtendingSelection: false)
-        } else if row < 0 {
+        } else if row < 0 || pane?.entry(at: row) == nil {
             deselectAll(nil)
         }
         return pane?.contextMenu()

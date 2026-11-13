@@ -104,7 +104,7 @@ struct PreferencesTests {
         #expect(!prefs.foldersFirst && prefs.gridIconSize == 144)
         prefs.defaults.removeObject(forKey: "foldersFirst")
         prefs.defaults.removeObject(forKey: "gridIconSize")
-        #expect(prefs.foldersFirst && prefs.gridIconSize == 72)
+        #expect(!prefs.foldersFirst && prefs.gridIconSize == 72)
         #expect(prefs.reopenWindows && prefs.openArchivesAsFolders && prefs.showIconPreviews)
         #expect(prefs.showListNameExtensions)
         #expect(!prefs.dualPaneAddressBars)

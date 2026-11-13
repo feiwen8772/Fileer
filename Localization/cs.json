@@ -2216,6 +2216,7 @@
     "“%@”: %@": "„%@“: %@",
     "← Copy": "← Kopírovat",
     "↑↓ Choose   ↩ Go   ⇥ Complete   esc Close": "↑↓ Vybrat   ↩ Otevřít   ⇥ Doplnit   esc Zavřít",
-    "✓ Full Disk Access is on. You’re all set.": "✓ Plný přístup k disku je zapnutý. Vše je připraveno."
+    "✓ Full Disk Access is on. You’re all set.": "✓ Plný přístup k disku je zapnutý. Vše je připraveno.",
+    "Use Groups": "Použít skupiny"
   }
 }

@@ -84,6 +84,7 @@ final class GridViewController: NSViewController, FileItemCollection, FileCollec
         cv.allowsEmptySelection = true
         cv.backgroundColors = [.controlBackgroundColor]
         ThemeStyle.bind(cv, to: .content)
+        cv.register(GridGroupHeader.self, forSupplementaryViewOfKind: GridLayout.groupHeaderKind, withIdentifier: GridGroupHeader.identifier)
         cv.register(GridItem.self, forItemWithIdentifier: GridItem.identifier)
         cv.setAccessibilityLabel(String(localized: "Icons", comment: "View mode: items as icons"))
         cv.host = self
@@ -122,6 +123,7 @@ final class GridViewController: NSViewController, FileItemCollection, FileCollec
         if directory?.fileViewKey != content.directory?.fileViewKey { cancelRename() }
         directory = content.directory
         details = content.details
+        layout.groups = content.groups
         setEntries(content.entries, matches: content.matches, incremental: !content.complete || hasPartialListing)
         hasPartialListing = !content.complete
     }
@@ -139,7 +141,7 @@ final class GridViewController: NSViewController, FileItemCollection, FileCollec
         let selection = Set(selectedURLs)
         let viewport = opensAtTop ? nil : CollectionViewport.capture(collectionView, entries: self.entries)
         let leadURL = lead.flatMap { $0 < self.entries.count ? self.entries[$0].url : nil }
-        let insertions = incremental && !opensAtTop ? FileInsertions.plan(from: self.entries, to: entries) : nil
+        let insertions = incremental && !opensAtTop && layout.groups.isEmpty ? FileInsertions.plan(from: self.entries, to: entries) : nil
         self.entries = entries
         self.matches = Dictionary(matches.map { ($0.key.fileViewKey, $0.value) }, uniquingKeysWith: { a, _ in a })
         indexByKey.removeAll(keepingCapacity: true)
@@ -586,5 +588,34 @@ final class DropHighlightView: NSView {
         path.lineWidth = 3
         ThemeStyle.accent.withAlphaComponent(0.7).setStroke()
         path.stroke()
+    }
+}
+
+
+final class GridGroupHeader: NSView {
+    static let identifier = NSUserInterfaceItemIdentifier("GridGroupHeader")
+    let label = NSTextField(labelWithString: "")
+    override init(frame: NSRect) {
+        super.init(frame: frame)
+        label.font = .systemFont(ofSize: 13, weight: .semibold)
+        label.translatesAutoresizingMaskIntoConstraints = false
+        addSubview(label)
+        NSLayoutConstraint.activate([
+            label.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 4),
+            label.trailingAnchor.constraint(lessThanOrEqualTo: trailingAnchor, constant: -4),
+            label.centerYAnchor.constraint(equalTo: centerYAnchor),
+        ])
+    }
+    @available(*, unavailable)
+    required init?(coder: NSCoder) { fatalError() }
+}
+
+extension GridViewController {
+    func collectionView(_ collectionView: NSCollectionView, viewForSupplementaryElementOfKind kind: NSCollectionView.SupplementaryElementKind, at indexPath: IndexPath) -> NSView {
+        let header = collectionView.makeSupplementaryView(ofKind: kind, withIdentifier: GridGroupHeader.identifier, for: indexPath)
+        if let header = header as? GridGroupHeader, layout.groups.indices.contains(indexPath.item) {
+            header.label.stringValue = layout.groups[indexPath.item].title
+        }
+        return header
     }
 }

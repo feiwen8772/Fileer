@@ -2072,6 +2072,7 @@
     "“%@”: %@": "”%@”: %@",
     "← Copy": "← Kopiera",
     "↑↓ Choose   ↩ Go   ⇥ Complete   esc Close": "↑↓ Välj   ↩ Gå   ⇥ Komplettera   esc Stäng",
-    "✓ Full Disk Access is on. You’re all set.": "✓ Fullständig skivåtkomst är på. Allt är klart."
+    "✓ Full Disk Access is on. You’re all set.": "✓ Fullständig skivåtkomst är på. Allt är klart.",
+    "Use Groups": "Använd grupper"
   }
 }

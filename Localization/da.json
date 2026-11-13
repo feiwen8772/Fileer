@@ -2072,6 +2072,7 @@
     "“%@”: %@": "»%@«: %@",
     "← Copy": "← Kopier",
     "↑↓ Choose   ↩ Go   ⇥ Complete   esc Close": "↑↓ Vælg   ↩ Gå   ⇥ Fuldfør   esc Luk",
-    "✓ Full Disk Access is on. You’re all set.": "✓ Fuld diskadgang er slået til. Du er klar."
+    "✓ Full Disk Access is on. You’re all set.": "✓ Fuld diskadgang er slået til. Du er klar.",
+    "Use Groups": "Brug grupper"
   }
 }

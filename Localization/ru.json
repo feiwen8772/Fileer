@@ -2362,6 +2362,7 @@
     "“%@”: %@": "«%@»: %@",
     "← Copy": "← Копировать",
     "↑↓ Choose   ↩ Go   ⇥ Complete   esc Close": "↑↓ Выбрать   ↩ Перейти   ⇥ Дополнить   esc Закрыть",
-    "✓ Full Disk Access is on. You’re all set.": "✓ Доступ ко всему диску включен. Все готово."
+    "✓ Full Disk Access is on. You’re all set.": "✓ Доступ ко всему диску включен. Все готово.",
+    "Use Groups": "Использовать группы"
   }
 }

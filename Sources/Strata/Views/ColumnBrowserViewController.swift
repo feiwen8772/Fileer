@@ -20,9 +20,12 @@ final class ColumnBrowserViewController: NSViewController, FileCollectionControl
     /// Order for columns this view loads itself (the first column keeps the browser's order).
     var sortComparator: @MainActor (FileEntry, FileEntry) -> Bool
     /// The same order, for sorting those columns away from the main thread as they're read; nil when it can't be.
+    var groupKey: BrowserGroupKey?
+    var groupAscending = true
     var sortedBy: BrowserOrdering.Snapshot?
     var showHidden: () -> Bool
     var defaultColumnWidth: CGFloat = 230
+    var showsFilePreview = false
     var previewColumnWidth: CGFloat = 290
 
     private(set) var root: URL?
@@ -118,9 +121,12 @@ final class ColumnBrowserViewController: NSViewController, FileCollectionControl
 
     func apply(_ content: FileCollectionContent, metadata: FileCollectionMetadata, animated: Bool) {
         guard let directory = content.directory else { return }
+        groupKey = metadata.grouping
+        groupAscending = metadata.groupAscending
         sortComparator = metadata.ordered
         sortedBy = metadata.sortedBy
         setRoot(directory, entries: content.entries, matches: content.matches, complete: content.complete)
+        resortLoadedColumns()
     }
 
     /// Shows `folder` in the first column with the browser's (filtered, sorted) entries. Calling again with the same
@@ -303,7 +309,7 @@ final class ColumnBrowserViewController: NSViewController, FileCollectionControl
             }
         } else {
             removeColumns(after: index)
-            if selected.count == 1, let entry = selected.first {
+            if showsFilePreview, selected.count == 1, let entry = selected.first {
                 let preview = ColumnPreviewPane(thumbnails: thumbnails, itemInfo: itemInfo)
                 strip.addSubview(preview)
                 self.preview = preview
@@ -414,6 +420,12 @@ final class ColumnBrowserViewController: NSViewController, FileCollectionControl
         fileDelegate?.fileView(self, renameClicked: url)
     }
 
+    func backgroundContextMenu() -> NSMenu? {
+        guard let pane = activePane else { return nil }
+        pane.deselectAll()
+        return menu(for: pane)
+    }
+
     func menu(for pane: ColumnPane) -> NSMenu? {
         if let index = panes.firstIndex(where: { $0 === pane }) { activeIndex = index }
         reportSelection(force: true)
@@ -468,10 +480,12 @@ final class ColumnBrowserViewController: NSViewController, FileCollectionControl
     }
 
     /// Metadata can arrive after a deeper column was sorted. Keep each column's selection and defer native editing.
-    func resortLoadedColumns() {
+    func resortLoadedColumns(forceGrouping: Bool = false) {
         for pane in panes.dropFirst() {
             let sorted = pane.entries.sorted(by: sortComparator)
-            if sorted.map(\.url) != pane.entries.map(\.url) { pane.setEntries(sorted, matches: [:]) }
+            if sorted.map(\.url) != pane.entries.map(\.url) || pane.needsGroupingUpdate || (forceGrouping && groupKey != nil) {
+                pane.setEntries(sorted, matches: [:])
+            }
         }
     }
 
@@ -511,7 +525,7 @@ final class ColumnBrowserViewController: NSViewController, FileCollectionControl
             existing.cancel()
         }
         guard let pane = panes.last(where: { $0.row(for: url) != nil }), let row = pane.row(for: url) else { return false }
-        let entry = pane.entries[row]
+        guard let entry = pane.entry(at: row) else { return false }
         pane.tableView.scrollRowToVisible(row)
         guard let cell = pane.tableView.view(atColumn: 0, row: row, makeIfNecessary: true) as? ColumnCellView else { return false }
         let font = pane.typography.font

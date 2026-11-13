@@ -144,7 +144,7 @@ package final class Prefs: PreviewTextSettings {
     }
 
     package var foldersFirst: Bool {
-        get { defaults.object(forKey: Key.foldersFirst) == nil ? true : defaults.bool(forKey: Key.foldersFirst) }
+        get { defaults.object(forKey: Key.foldersFirst) == nil ? false : defaults.bool(forKey: Key.foldersFirst) }
         set { defaults.set(newValue, forKey: Key.foldersFirst); notifications.post(name: .prefsChanged, object: nil) }
     }
 

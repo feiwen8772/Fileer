@@ -8,7 +8,7 @@ import StrataTheme
 
 extension BrowserViewController: NSOutlineViewDataSource, NSOutlineViewDelegate {
     func outlineView(_ outlineView: NSOutlineView, numberOfChildrenOfItem item: Any?) -> Int {
-        guard let node = item as? FileNode else { return rows.count }
+        guard let node = item as? FileNode else { return displayedRows.count }
         guard let children = node.children else {
             loadChildren(of: node)
             return 0
@@ -18,8 +18,8 @@ extension BrowserViewController: NSOutlineViewDataSource, NSOutlineViewDelegate 
 
     func outlineView(_ outlineView: NSOutlineView, child index: Int, ofItem item: Any?) -> Any {
         guard let node = item as? FileNode else {
-            if rows.indices.contains(index) { return rows[index] }
-            if let first = rows.first { return first }
+            if displayedRows.indices.contains(index) { return displayedRows[index] }
+            if let first = displayedRows.first { return first }
             return FileNode(entry: FileEntry(url: URL(fileURLWithPath: "/"), name: "", isDirectory: true, isPackage: false,
                                              isHidden: false, isSymlink: false, isVolume: false, size: nil, modified: nil, created: nil,
                                              added: nil, kind: "", contentType: nil))
@@ -155,7 +155,7 @@ extension BrowserViewController: NSOutlineViewDataSource, NSOutlineViewDelegate 
         }
         let selection = selectedURLs
         listing.sort(using: sort)
-        outlineView.reloadData()
+        reloadOutline()
         pushContent()
         select(selection, scroll: false)
         if loading.hasPartialListing { refresh() }

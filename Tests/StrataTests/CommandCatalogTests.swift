@@ -15,6 +15,17 @@ struct CommandCatalogTests {
 
     init() throws { testEnvironment = try IndependentEnvironment() }
 
+    @Test func shiftDeleteAliasesUseTheConfirmedPermanentDeletionCommand() {
+        for key in [String(UnicodeScalar(NSDeleteFunctionKey)!), "\u{8}"] {
+            let item = MainMenu.immediateDeleteAlias(key: key, id: "fixture")
+            #expect(item.keyEquivalent == key)
+            #expect(item.keyEquivalentModifierMask == [.shift])
+            #expect(item.action == StrataCommand.deleteImmediately.action)
+            #expect(item.isHidden && item.allowsKeyEquivalentWhenHidden)
+            #expect(item.target == nil)
+        }
+    }
+
     private func waitForLoad(_ browser: BrowserViewController) async throws {
         for _ in 0..<200 {
             if browser.isLoaded && !browser.isLoadingFolder { return }

@@ -17,6 +17,8 @@ extension BrowserWindowController: NSToolbarDelegate, NSToolbarItemValidation {
         case .pathBar: return makeLocationItem(id, inserted: flag)
         case .sidebarMode: return makeSidebarModeItem(id, inserted: flag)
         case .viewMode: return makeViewModeItem(id, inserted: flag)
+        case .sortOrder: return makeSortOrderItem(id)
+        case .groupOrder: return makeGroupOrderItem(id)
         case .dualPane: return makeDualPaneItem(id, inserted: flag)
         case .share: return makeShareItem(id)
         case .transfers: return makeTransfersItem(id)
@@ -30,6 +32,7 @@ extension BrowserWindowController: NSToolbarDelegate, NSToolbarItemValidation {
         switch item.itemIdentifier {
         case .back: return validateMenuItem(StrataCommand.goBack.menuItem())
         case .forward: return validateMenuItem(StrataCommand.goForward.menuItem())
+        case .groupOrder: return !isClosed && window?.attachedSheet == nil && browser.canGroup
         case .viewMode: return true
         default: return true
         }
@@ -146,5 +149,65 @@ extension BrowserWindowController: NSToolbarDelegate, NSToolbarItemValidation {
         item.preferredWidthForSearchField = 200
         if flag { toolbarItems.adopt(item) }
         return item
+    }
+}
+
+
+extension NSToolbarItem.Identifier {
+    static let sortOrder = Self("sortOrder")
+}
+
+extension BrowserWindowController {
+    private func makeSortOrderItem(_ id: NSToolbarItem.Identifier) -> NSToolbarItem {
+        let item = NSMenuToolbarItem(itemIdentifier: id)
+        let sort = MainMenu.sortByMenu(target: self, withShortcuts: false)
+        item.label = sort.title
+        item.toolTip = sort.title
+        item.image = sort.image
+        item.menu = sort.submenu ?? NSMenu()
+        for choice in item.menu.items {
+            choice.action = #selector(sortFromToolbar(_:))
+        }
+        item.showsIndicator = true
+        return item
+    }
+
+    @objc func sortFromToolbar(_ sender: NSMenuItem) {
+        guard canSortFromToolbar(sender) else { return }
+        browser.sortBy(sender)
+    }
+
+    func canSortFromToolbar(_ item: NSMenuItem) -> Bool {
+        guard !isClosed, window?.attachedSheet == nil,
+              BrowserViewController.sortMenuKeys.indices.contains(item.tag) else { return false }
+        let choice = NSMenuItem(title: item.title, action: #selector(BrowserViewController.sortBy(_:)), keyEquivalent: "")
+        choice.tag = item.tag
+        let enabled = browser.validateMenuItem(choice)
+        item.state = choice.state
+        return enabled
+    }
+}
+
+
+extension NSToolbarItem.Identifier {
+    static let groupOrder = Self("groupOrder")
+}
+
+extension BrowserWindowController {
+    private func makeGroupOrderItem(_ id: NSToolbarItem.Identifier) -> NSToolbarItem {
+        let item = NSToolbarItem(itemIdentifier: id)
+        let group = BrowserGrouping.menu(target: self, action: #selector(groupFromToolbar(_:)))
+        item.label = group.title
+        item.toolTip = group.title
+        item.image = group.image
+        item.target = self
+        item.action = #selector(groupFromToolbar(_:))
+        item.menuFormRepresentation = group
+        return item
+    }
+
+    @objc func groupFromToolbar(_ sender: Any?) {
+        guard !isClosed, window?.attachedSheet == nil else { return }
+        browser.chooseGrouping(NSMenuItem())
     }
 }

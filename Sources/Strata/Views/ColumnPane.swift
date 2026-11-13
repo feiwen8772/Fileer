@@ -9,6 +9,13 @@ final class ColumnPane: NSView, NSTableViewDataSource, NSTableViewDelegate {
     private(set) var entries: [FileEntry] = []
     private(set) var isLoaded = false
     private(set) var hasPartialListing = false
+    private(set) var displayRows: [FileNode] = []
+    private let grouping = BrowserGrouping()
+    private var appliedGroupKey: BrowserGroupKey?
+    private var appliedGroupAscending = true
+    var needsGroupingUpdate: Bool {
+        appliedGroupKey != controller?.groupKey || appliedGroupAscending != (controller?.groupAscending ?? true)
+    }
     private var matches: [String: [Int]] = [:]
     private var rowByKey: [String: Int] = [:]
     weak var controller: ColumnBrowserViewController?
@@ -83,7 +90,7 @@ final class ColumnPane: NSView, NSTableViewDataSource, NSTableViewDelegate {
         column.resizingMask = .autoresizingMask
         tableView.addTableColumn(column)
         tableView.headerView = nil
-        tableView.style = .inset
+        tableView.style = .fullWidth
         tableView.rowHeight = FileViewStyle.columnHeight(for: preferences)
         tableView.intercellSpacing = NSSize(width: 0, height: 0)
         tableView.columnAutoresizingStyle = .uniformColumnAutoresizingStyle
@@ -112,7 +119,7 @@ final class ColumnPane: NSView, NSTableViewDataSource, NSTableViewDelegate {
         scrollView.drawsBackground = false
         // The column view sits between the toolbar and the status bar, so no automatic insets.
         scrollView.automaticallyAdjustsContentInsets = false
-        scrollView.contentInsets = NSEdgeInsets(top: 4, left: 0, bottom: 4, right: 0)
+        scrollView.contentInsets = NSEdgeInsets(top: 0, left: 0, bottom: 4, right: 0)
         addSubview(scrollView)
     }
 
@@ -156,7 +163,7 @@ final class ColumnPane: NSView, NSTableViewDataSource, NSTableViewDelegate {
     override func layout() {
         super.layout()
         let statusHeight: CGFloat = listingStatus.isHidden ? 0 : 20
-        scrollView.frame = NSRect(x: 0, y: 0, width: bounds.width - 1, height: max(0, bounds.height - statusHeight))
+        scrollView.frame = NSRect(x: 0, y: 0, width: max(0, bounds.width - 1), height: max(0, bounds.height - statusHeight))
         listingStatus.frame = NSRect(x: 8, y: bounds.height - statusHeight, width: max(0, bounds.width - 16), height: statusHeight)
         divider.frame = NSRect(x: bounds.width - 5, y: 0, width: 5, height: bounds.height)
         spinner.sizeToFit()
@@ -288,20 +295,25 @@ final class ColumnPane: NSView, NSTableViewDataSource, NSTableViewDelegate {
         case .added(let folder): (entries.filter { rowByKey[$0.url.fileViewKey] == nil }, folder, wasLoaded)
         }
         let before = selectedKeys
-        let insertions = partial || hasPartialListing
+        let insertions = controller?.groupKey == nil && displayRows.allSatisfy({ $0.groupTitle == nil }) && (partial || hasPartialListing)
             ? FileInsertions.plan(from: self.entries, to: entries) : nil
         let viewport = TableViewport.capture(tableView) { item in
-            guard let row = item as? Int, self.entries.indices.contains(row) else { return nil }
-            return self.entries[row].locationKey
+            guard let row = item as? Int else { return nil }
+            return self.entry(at: row)?.locationKey
         }
         self.entries = entries
+        appliedGroupKey = controller?.groupKey
+        appliedGroupAscending = controller?.groupAscending ?? true
+        let nodes = entries.map { FileNode(entry: $0) }
+        grouping.rebuild(nodes, by: appliedGroupKey, ascending: appliedGroupAscending) { [tags = statuses.tags] in tags.cachedTags(for: $0).map(\.name) }
+        displayRows = appliedGroupKey == nil ? nodes : grouping.headers.flatMap { [$0] + ($0.children ?? []) }
         hasPartialListing = partial
         listingStatus.isHidden = !partial
         listingStatus.stringValue = partial ? String(localized: "Loaded") + " · " + String(localized: "\(entries.count) items", comment: "plural") + " · " + (listingFailed ? String(localized: "Listing incomplete") : String(localized: "Loading…")) : ""
         needsLayout = true
         self.matches = matches
         rowByKey.removeAll(keepingCapacity: true)
-        for (i, entry) in entries.enumerated() { rowByKey[entry.url.fileViewKey] = i }
+        for (row, node) in displayRows.enumerated() where node.groupTitle == nil { rowByKey[node.url.fileViewKey] = row }
         isLoaded = true
         suppressSelection = true
         if let insertions { tableView.insertRows(at: insertions, withAnimation: []) }
@@ -320,11 +332,11 @@ final class ColumnPane: NSView, NSTableViewDataSource, NSTableViewDelegate {
     }
 
     private var selectedKeys: [String] {
-        tableView.selectedRowIndexes.compactMap { $0 < entries.count ? entries[$0].url.fileViewKey : nil }
+        tableView.selectedRowIndexes.compactMap { entry(at: $0)?.url.fileViewKey }
     }
 
     var selectedEntries: [FileEntry] {
-        tableView.selectedRowIndexes.compactMap { $0 < entries.count ? entries[$0] : nil }
+        tableView.selectedRowIndexes.compactMap { entry(at: $0) }
     }
 
     func row(for url: URL) -> Int? { rowByKey[url.fileViewKey] }
@@ -336,7 +348,7 @@ final class ColumnPane: NSView, NSTableViewDataSource, NSTableViewDelegate {
     }
 
     func selectRow(_ row: Int) {
-        guard entries.indices.contains(row) else { return }
+        guard entry(at: row) != nil else { return }
         tableView.selectRowIndexes([row], byExtendingSelection: false)
         tableView.scrollRowToVisible(row)
     }
@@ -358,7 +370,7 @@ final class ColumnPane: NSView, NSTableViewDataSource, NSTableViewDelegate {
         let visible = tableView.rows(in: tableView.visibleRect)
         guard visible.length > 0 else { return }
         var rows = IndexSet(integersIn: visible.location..<NSMaxRange(visible))
-        if let paths { rows = IndexSet(rows.filter { entries.indices.contains($0) && paths.contains(entries[$0].url.path) }) }
+        if let paths { rows = IndexSet(rows.filter { entry(at: $0).map { paths.contains($0.url.path) } == true }) }
         if let renamingRow { rows.remove(renamingRow) }
         tableView.reloadData(forRowIndexes: rows, columnIndexes: [0])
     }
@@ -378,15 +390,28 @@ final class ColumnPane: NSView, NSTableViewDataSource, NSTableViewDelegate {
 
     // MARK: Table
 
-    func numberOfRows(in tableView: NSTableView) -> Int { entries.count }
+    func entry(at row: Int) -> FileEntry? {
+        guard displayRows.indices.contains(row) else { return nil }
+        let node = displayRows[row]
+        return node.groupTitle == nil ? node.entry : nil
+    }
+
+    func numberOfRows(in tableView: NSTableView) -> Int { displayRows.count }
+
+    func tableView(_ tableView: NSTableView, isGroupRow row: Int) -> Bool { entry(at: row) == nil }
+    func tableView(_ tableView: NSTableView, shouldSelectRow row: Int) -> Bool { entry(at: row) != nil }
 
     func tableView(_ tableView: NSTableView, rowViewForRow row: Int) -> NSTableRowView? {
         ThemeRowView(alternatingRows: preferences.alternatingRows)
     }
 
     func tableView(_ tableView: NSTableView, viewFor tableColumn: NSTableColumn?, row: Int) -> NSView? {
+        guard let entry = entry(at: row) else {
+            let header = GridGroupHeader(frame: .zero)
+            header.label.stringValue = displayRows.indices.contains(row) ? displayRows[row].groupTitle ?? "" : ""
+            return header
+        }
         let cell = tableView.makeView(withIdentifier: ColumnCellView.identifier, owner: nil) as? ColumnCellView ?? ColumnCellView()
-        let entry = entries[row]
         let git = statuses.git
         cell.configure(entry, matches: matches[entry.url.fileViewKey] ?? [],
                        dimmed: entry.isHidden || clipboard.isCut(entry.url) || git.isIgnored(entry.url),
@@ -402,26 +427,30 @@ final class ColumnPane: NSView, NSTableViewDataSource, NSTableViewDelegate {
     }
 
     @objc private func doubleClicked(_ sender: Any?) {
-        guard tableView.clickedRow >= 0 else { return }
+        guard entry(at: tableView.clickedRow) != nil else { return }
         controller?.open(from: self)
     }
 
     // Drag and drop
 
     func tableView(_ tableView: NSTableView, pasteboardWriterForRow row: Int) -> NSPasteboardWriting? {
-        entries.indices.contains(row) ? ContainerDragItem.writer(for: entries[row].url, copies: copies) : nil
+        entry(at: row).map { ContainerDragItem.writer(for: $0.url, copies: copies) }
     }
 
     func tableView(_ tableView: NSTableView, validateDrop info: NSDraggingInfo, proposedRow row: Int,
                    proposedDropOperation dropOperation: NSTableView.DropOperation) -> NSDragOperation {
         let urls = FileDrop.urls(info, copies: copies)
-        let resting = !urls.isEmpty && dropOperation == .on && row >= 0 && row < entries.count && entries[row].isFolder
-            && !FileDrop.isInside(urls, entries[row].url, during: info)
-            && SpringLoader.canOpen(entries[row].url, browsing: folder, during: info)
-        springLoader.hover(resting ? entries[row].url : nil, drag: info.draggingSequenceNumber)
+        let entry = entry(at: row)
+        let resting = entry.flatMap { entry -> URL? in
+            guard !urls.isEmpty, dropOperation == .on, entry.isFolder,
+                  !FileDrop.isInside(urls, entry.url, during: info),
+                  SpringLoader.canOpen(entry.url, browsing: folder, during: info) else { return nil }
+            return entry.url
+        }
+        springLoader.hover(resting, drag: info.draggingSequenceNumber)
         guard !urls.isEmpty else { return [] }
-        if dropOperation == .on, row >= 0, row < entries.count, entries[row].isFolder {
-            let operation = FileDrop.operation(urls, into: entries[row].url, info: info, copies: copies)
+        if dropOperation == .on, let entry, entry.isFolder {
+            let operation = FileDrop.operation(urls, into: entry.url, info: info, copies: copies)
             if !operation.isEmpty { return operation }
         }
         tableView.setDropRow(-1, dropOperation: .on)
@@ -432,8 +461,13 @@ final class ColumnPane: NSView, NSTableViewDataSource, NSTableViewDelegate {
                    dropOperation: NSTableView.DropOperation) -> Bool {
         springLoader.cancel()
         let urls = FileDrop.urls(info, copies: copies)
-        let target = row >= 0 && row < entries.count && dropOperation == .on && entries[row].isFolder ? entries[row].url : folder
+        let target = dropTarget(row: row, operation: dropOperation)
         return controller?.drop(urls, onto: target, from: self, info: info) ?? false
+    }
+
+    func dropTarget(row: Int, operation: NSTableView.DropOperation) -> URL {
+        if operation == .on, let entry = entry(at: row), entry.isFolder { return entry.url }
+        return folder
     }
 
     // Keyboard and mouse, from the table

@@ -2072,6 +2072,7 @@
     "“%@”: %@": "“%@”: %@",
     "← Copy": "← Kopyala",
     "↑↓ Choose   ↩ Go   ⇥ Complete   esc Close": "↑↓ Seç   ↩ Git   ⇥ Tamamla   esc Kapat",
-    "✓ Full Disk Access is on. You’re all set.": "✓ Tam Disk Erişimi açık. Her şey hazır."
+    "✓ Full Disk Access is on. You’re all set.": "✓ Tam Disk Erişimi açık. Her şey hazır.",
+    "Use Groups": "Grupları kullan"
   }
 }

@@ -181,6 +181,7 @@ extension BrowserViewController {
     @objc func sortBy(_ sender: NSMenuItem) {
         guard Self.sortMenuKeys.indices.contains(sender.tag) else { return }
         let choice = Self.sortMenuKeys[sender.tag]
+        if preferences.foldersFirst { preferences.foldersFirst = false }
         // Like Finder, picking the current order again keeps its direction.
         if outlineView.sortDescriptors.first?.key == choice.key.rawValue { return }
         outlineView.sortDescriptors = [NSSortDescriptor(key: choice.key.rawValue, ascending: choice.ascending)]
@@ -424,7 +425,7 @@ extension BrowserViewController {
     /// Tags changed (here or in another window) or were read: redraw what's shown.
     @objc func tagsChanged() {
         reloadVisibleCells()
-        if ordering.choice?.key == .tags { scheduleResort() }
+        if ordering.choice?.key == .tags || groupKey == .tags { scheduleResort() }
     }
 
     /// Items' own icons arrived (an app's, a package's, a special folder's): rows drawn with their kind's draw them.

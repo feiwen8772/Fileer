@@ -1928,6 +1928,7 @@
     "“%@”: %@": "「%@」：%@",
     "← Copy": "← 拷貝",
     "↑↓ Choose   ↩ Go   ⇥ Complete   esc Close": "↑↓ 選擇   ↩ 前往   ⇥ 自動完成   esc 關閉",
-    "✓ Full Disk Access is on. You’re all set.": "✓「完全取用磁碟」權限已開啟。一切就緒。"
+    "✓ Full Disk Access is on. You’re all set.": "✓「完全取用磁碟」權限已開啟。一切就緒。",
+    "Use Groups": "使用群組"
   }
 }

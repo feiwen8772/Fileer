@@ -1928,6 +1928,7 @@
     "“%@”: %@": "“%@”：%@",
     "← Copy": "← 拷贝",
     "↑↓ Choose   ↩ Go   ⇥ Complete   esc Close": "↑↓ 选择   ↩ 前往   ⇥ 补全   esc 关闭",
-    "✓ Full Disk Access is on. You’re all set.": "✓ 完全磁盘访问权限已打开。一切就绪。"
+    "✓ Full Disk Access is on. You’re all set.": "✓ 完全磁盘访问权限已打开。一切就绪。",
+    "Use Groups": "使用群组"
   }
 }

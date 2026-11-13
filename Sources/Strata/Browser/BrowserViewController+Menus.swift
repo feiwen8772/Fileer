@@ -210,6 +210,7 @@ extension BrowserViewController: NSMenuItemValidation, PaneCommandState {
     /// Show and sort options; nil for anything else.
     private func validateViewOption(_ item: NSMenuItem, _ action: Selector) -> Bool? {
         switch action {
+        case #selector(chooseGrouping(_:)): return validateGrouping(item)
         case #selector(toggleHiddenFiles(_:)):
             item.state = preferences.showHidden ? .on : .off
             return true

@@ -10,6 +10,27 @@ import Testing
 @testable import StrataSearch
 
 struct ToolbarCustomizationTests {
+    @Test func sortingMenuIsInTheDefaultToolbarAndUsesTheActiveBrowser() throws {
+        let tree = try TestTree("left/", "right/"), state = try TestTree()
+        let environment = try PreviewEnvironment(state)
+        let owner = controller(tree, environment)
+        defer { owner.window?.contentViewController = nil }
+        let toolbar = try #require(owner.window?.toolbar)
+        #expect(BrowserToolbar.defaults.contains(.sortOrder))
+        #expect(BrowserToolbar.layout(BrowserToolbar.defaults.filter { $0 != .sortOrder && $0 != .groupOrder }.map(\.rawValue)) == BrowserToolbar.defaults)
+        let item = try #require(owner.toolbar(toolbar, itemForItemIdentifier: .sortOrder,
+                                             willBeInsertedIntoToolbar: true) as? NSMenuToolbarItem)
+        let menu = try #require(item.menu)
+        #expect(menu.items.count == BrowserViewController.sortMenuKeys.count)
+        let size = try #require(menu.items.first { BrowserViewController.sortMenuKeys[$0.tag].key == .size })
+        owner.sortFromToolbar(size)
+        #expect(owner.browser.outlineView.sortDescriptors.first?.key == "size")
+        #expect(owner.validateMenuItem(size))
+        #expect(size.state == .on)
+        owner.browser.showResults([], total: 0)
+        #expect(!owner.validateMenuItem(size))
+    }
+
     @Test func reloadBelongsOnlyToTheCustomizationItems() {
         let reload = BrowserToolbar.identifier(.reloadFolder)
         #expect(!BrowserToolbar.defaults.contains(reload))
@@ -71,7 +92,7 @@ struct ToolbarCustomizationTests {
         let toolbar = try #require(first.window?.toolbar)
         #expect(toolbar.allowsUserCustomization && !toolbar.autosavesConfiguration)
         #expect(first.toolbarDefaultItemIdentifiers(toolbar) == BrowserToolbar.defaults)
-        #expect(BrowserToolbar.defaults.count == 15)
+        #expect(BrowserToolbar.defaults.count == 17)
         let reload = BrowserToolbar.identifier(.reloadFolder)
         #expect(!BrowserToolbar.defaults.contains(reload))
         #expect(BrowserToolbar.allowed.filter { $0 == reload }.count == 1)
@@ -168,6 +189,7 @@ struct ToolbarCustomizationTests {
                 for pane in owner.panes { await pane.browser.directoryReads.task?.value }
                 let source = owner.panes[index].browser
                 source.setMode(mode, remember: false)
+                if source.canGroup { source.chooseGrouping(NSMenuItem()) }
                 owner.window?.makeFirstResponder(source.focusView)
                 let selected = tree.url(index == 0 ? "left/a" : "right/a")
                 source.select([selected], scroll: false)
@@ -220,6 +242,7 @@ struct ToolbarCustomizationTests {
                 source.select([], scroll: false)
                 #expect(!owner.validateToolbarItem(copy) && !owner.validateToolbarItem(move))
                 source.setMode(mode, remember: false)
+                if source.canGroup { source.chooseGrouping(NSMenuItem()) }
                 owner.window?.makeFirstResponder(source.focusView)
 
                 let before = tree.snapshot(), queue = environment.services.transfers, history = queue.history

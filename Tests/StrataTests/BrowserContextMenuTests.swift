@@ -44,6 +44,26 @@ struct BrowserContextMenuTests {
         }
     }
 
+    @Test func backgroundSortingUsesTheSameCommandsForLocalServerAndArchiveFolders() throws {
+        let target = NSObject()
+        for location in 0..<3 {
+            var context = facts([])
+            context.isOnServer = location == 1
+            context.isInsideArchive = location == 2
+            let menu = BrowserContextMenu(facts: context, target: target) { _ in }.make()
+            let sort = try #require(menu.items.first { $0.submenu?.items.first?.action == #selector(BrowserViewController.sortBy(_:)) }?.submenu)
+            let mainSort = try #require(MainMenu.sortByMenu().submenu)
+            #expect(sort.items.map(\.title) == mainSort.items.map(\.title))
+            #expect(sort.items.count == BrowserViewController.sortMenuKeys.count)
+            for (index, item) in sort.items.enumerated() {
+                #expect(item.action == #selector(BrowserViewController.sortBy(_:)))
+                #expect(item.target === target)
+                #expect(item.tag == index)
+                #expect(item.keyEquivalent.isEmpty)
+            }
+        }
+    }
+
     private func actions(_ selection: [FileEntry]) -> [Selector?] {
         actions(facts(selection))
     }
