@@ -142,5 +142,11 @@
   "instance": "SecureStorage.Context.shared",
   "count": 1,
   "reason": "WebKit's compiled content rules are the same for every window and preview; keeping them in the app's caches only saves compiling them again."
+ },
+ {
+  "file": "Sources/Strata/Window/BrowserWindowController.swift",
+  "instance": "mounter: .live",
+  "count": 1,
+  "reason": "Like Connect to Server, the network page mounts through macOS NetFS. The page takes an injected ServerMountSession for headless tests; no live discovery or mounts run in tests."
  }
 ]

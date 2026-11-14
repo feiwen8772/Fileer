@@ -278,26 +278,3 @@ private final class Keycap: NSView {
 
     override var wantsUpdateLayer: Bool { true }
 }
-
-/// The sidebar's footer: a quiet button that opens the shortcuts list.
-final class SidebarFooterController: NSSplitViewItemAccessoryViewController {
-    override func loadView() {
-        let button = NSButton(title: String(localized: "Keyboard Shortcuts"), image: NSImage(systemSymbolName: "command", accessibilityDescription: nil) ?? NSImage(),
-                              target: nil, action: #selector(AppDelegate.showShortcuts(_:)))
-        button.bezelStyle = .accessoryBarAction
-        button.isBordered = false
-        button.imagePosition = .imageLeading
-        button.contentTintColor = .secondaryLabelColor
-        button.font = .systemFont(ofSize: 12)
-        button.toolTip = String(localized: "Every shortcut in Strata (⌘/)")
-        button.translatesAutoresizingMaskIntoConstraints = false
-        let container = ThemeAccessoryView(role: .sidebar)
-        container.addSubview(button)
-        NSLayoutConstraint.activate([
-            container.heightAnchor.constraint(equalToConstant: 36),
-            button.leadingAnchor.constraint(equalTo: container.leadingAnchor, constant: 14),
-            button.centerYAnchor.constraint(equalTo: container.centerYAnchor),
-        ])
-        view = container
-    }
-}

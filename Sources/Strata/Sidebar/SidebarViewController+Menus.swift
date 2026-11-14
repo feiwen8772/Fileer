@@ -4,8 +4,20 @@ import AppKit
 /// be removed.
 extension SidebarViewController: NSMenuDelegate {
     func menuNeedsUpdate(_ menu: NSMenu) {
+        populateItemMenu(menu, for: outline.item(atRow: outline.clickedRow))
+    }
+
+    func populateItemMenu(_ menu: NSMenu, for candidate: Any?) {
+        func add(_ title: String.LocalizationValue, _ action: Selector, _ url: URL) {
+            let entry = NSMenuItem(title: String(localized: title), action: action, keyEquivalent: "")
+            entry.target = self
+            entry.representedObject = url
+            menu.addItem(entry)
+        }
         menu.removeAllItems()
-        guard let item = outline.item(atRow: outline.clickedRow) as? SidebarItem else { return }
+        if candidate is SidebarSection, canPinSpaceSection(candidate) { populateSpaceMenu(menu, item: candidate); return }
+        if candidate is SidebarSection { return }
+        guard let item = candidate as? SidebarItem else { populateSpaceMenu(menu, item: nil, includeSpaceActions: candidate == nil); return }
         if case .containers = item.target { return }
         if case .workspace(let name) = item.target {
             addWorkspaceItems(name, to: menu)
@@ -43,11 +55,14 @@ extension SidebarViewController: NSMenuDelegate {
             return
         }
         let favorite = isFavorite(item)
-        add("Open in New Tab", #selector(openInNewTab(_:)), url)
+        if canPinSpaceSection(item), item.symbol != "folder", !url.hasDirectoryPath {
+            add("Open", #selector(openReference(_:)), url)
+        } else { add("Open in New Tab", #selector(openInNewTab(_:)), url) }
         add("Copy Path", #selector(copyItemPath(_:)), url)
         menu.addItem(.separator())
         if favorite {
-            add("Remove from Sidebar", #selector(removeFavorite(_:)), url)
+            if canPinSpaceSection(item), let removal = referenceRemovalItem(item) { menu.addItem(removal) }
+            else { add("Remove from Sidebar", #selector(removeFavorite(_:)), url) }
         } else if canAddToFavorites(item) {
             add("Add to Favorites", #selector(addFavorite(_:)), url)
         }
@@ -150,16 +165,14 @@ extension SidebarViewController: NSMenuDelegate {
         services.workspaces.confirmDelete(name, in: view.window)
     }
 
-    private func add(_ title: String.LocalizationValue, _ action: Selector, _ url: URL) {
-        let entry = NSMenuItem(title: String(localized: title), action: action, keyEquivalent: "")
-        entry.target = self
-        entry.representedObject = url
-        outline.menu?.addItem(entry)
-    }
-
     @objc private func forgetTag(_ sender: NSMenuItem) {
         guard let name = sender.representedObject as? String else { return }
         services.tags.forget(name)
+    }
+
+    @objc private func openReference(_ sender: NSMenuItem) {
+        guard let url = sender.representedObject as? URL else { return }
+        onPinnedItem?(url)
     }
 
     @objc private func openInNewTab(_ sender: NSMenuItem) {

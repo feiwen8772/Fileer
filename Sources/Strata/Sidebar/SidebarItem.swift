@@ -14,14 +14,24 @@ final class SidebarSection {
 }
 
 extension NSPasteboard.PasteboardType {
+    static let sidebarReference = NSPasteboard.PasteboardType("dev.strata.sidebar-reference-url")
     /// A favorite being reordered, or a folder being added to Favorites, inside the sidebar (never a file URL: dropping it
     /// elsewhere mustn't move the folder).
     static let sidebarFavorite = NSPasteboard.PasteboardType("dev.strata.sidebar-favorite")
 }
 
+enum SidebarSystemLocation: String, CaseIterable {
+    case network, airDrop
+
+    var title: String { self == .network ? String(localized: "Network") : String(localized: "AirDrop") }
+    var symbol: String { self == .network ? "network" : "dot.radiowaves.left.and.right" }
+
+}
+
 /// Where a sidebar row takes you.
 enum SidebarTarget: Equatable {
     case folder(URL)
+    case systemLocation(SidebarSystemLocation)
     case recents
     case search(SavedSearch)
     case duplicates

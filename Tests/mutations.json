@@ -9736,5 +9736,33 @@
     "replace": "return node.entry",
     "rule": "Grouped column headers must never become selected or dragged files",
     "tests": "BrowserGroupingTests/groupedColumnsMapHeadersAndDeeperSelectionsToTheirExactFiles|ToolbarCustomizationTests/toolbarTrashKeepsTheActivePanesExactSelectionInEveryViewAndUndoRestoresIt"
+  },
+  {
+    "file": "Strata/Sidebar/SidebarSpaces.swift",
+    "find": "if mask.contains(.copy) { return .copy }",
+    "replace": "if mask.contains(.copy) { return .move }",
+    "rule": "Sidebar space pinning never advertises a source-file move",
+    "tests": "SidebarSpacesTests/customSidebarHasBottomFavoritesAndDropsOnlyPinReferences"
+  },
+  {
+    "file": "Strata/Sidebar/SidebarSectionOrdering.swift",
+    "find": "preferences.defaults.set(ids, forKey: sectionSettingsKey + \".order\")",
+    "replace": "preferences.defaults.set([], forKey: sectionSettingsKey + \".order\")",
+    "rule": "Sidebar category drag order persists independently for every space",
+    "tests": "SidebarSpacesTests/sectionOrderAndCollapsedStateStayWithTheirSpace"
+  },
+  {
+    "file": "Strata/Sidebar/SidebarViewController+Menus.swift",
+    "find": "if candidate is SidebarSection, canPinSpaceSection(candidate) { populateSpaceMenu(menu, item: candidate); return }",
+    "replace": "if activeSpace != nil { populateSpaceMenu(menu, item: candidate); return }",
+    "rule": "Custom spaces use the default built-in sidebar item context menus",
+    "tests": "SidebarSpacesTests/builtInSectionsAndMenusShareTheDefaultDataAndActions"
+  },
+  {
+    "file": "Strata/Sidebar/SidebarViewController.swift",
+    "find": "if item is SidebarSection, canPinSpaceSection(item) {\n            if let path = info.draggingPasteboard.string(forType: .sidebarFavorite)",
+    "replace": "if canPinSpaceSection(item) {\n            if let path = info.draggingPasteboard.string(forType: .sidebarFavorite)",
+    "rule": "Custom category folder rows keep native file drops rather than pinning the sources",
+    "tests": "TransferContextTests/bothSidebarDropModesUseTheWindowQueue"
   }
 ]

@@ -2073,6 +2073,22 @@
     "← Copy": "← Másolás",
     "↑↓ Choose   ↩ Go   ⇥ Complete   esc Close": "↑↓ Kiválasztás   ↩ Ugrás   ⇥ Kiegészítés   esc Bezárás",
     "✓ Full Disk Access is on. You’re all set.": "✓ A teljes lemezhozzáférés be van kapcsolva. Minden készen áll.",
-    "Use Groups": "Csoportok használata"
+    "Use Groups": "Csoportok használata",
+    "Default Space": "Alapértelmezett tér",
+    "Pinned Items": "Rögzített elemek",
+    "New Sidebar Space…": "Új oldalsávterület…",
+    "Space Overview": "Terület áttekintése",
+    "New Category…": "Új kategória…",
+    "Rename Category…": "Kategória átnevezése…",
+    "Remove Category": "Kategória eltávolítása",
+    "Add Link…": "Hivatkozás hozzáadása…",
+    "Network": "Hálózat",
+    "AirDrop": "AirDrop",
+    "Discover shared computers on your local network, or connect to a server.": "Keressen megosztott számítógépeket a helyi hálózaton, vagy csatlakozzon egy szerverhez.",
+    "Choose files or folders, then select a nearby recipient in the system AirDrop panel.": "Válasszon fájlokat vagy mappákat, majd egy közeli címzettet a rendszer AirDrop paneljén.",
+    "Choose Files…": "Fájlok kiválasztása…",
+    "Network discovery is unavailable. You can still connect to a server by address.": "A hálózatfelderítés nem érhető el. Cím alapján továbbra is csatlakozhat szerverhez.",
+    "Couldn’t connect to the server.": "Nem sikerült csatlakozni a szerverhez.",
+    "infoplist.NSLocalNetworkUsageDescription": "A Strata megkeresi a megosztott számítógépeket, hogy böngészhesse fájljaikat a helyi hálózaton."
   }
 }

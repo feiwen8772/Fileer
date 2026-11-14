@@ -6,6 +6,7 @@ enum Destination: Equatable {
     case search(String, scope: URL?)
     case recents
     case duplicates
+    case systemLocation(SidebarSystemLocation)
 }
 
 /// One side of a window: a browser with its own place and back/forward history.
@@ -43,6 +44,7 @@ final class Pane {
 
     /// Somewhere new: what was under way for the old place stops.
     func navigate(to target: Destination) {
+        host.closeSystemPage()
         opening.cancel()
         guard target != destination else { return }
         destination = target
@@ -62,6 +64,7 @@ final class Pane {
     func stopBackgroundWork() {
         opening.cancel()
         host.pathBar.cancelEditing()
+        host.closeSystemPage()
         browser.stopBackgroundWork()
         folderEntryRead?.cancel()
         search.stop()
@@ -87,7 +90,7 @@ final class Pane {
             let shown = (browser.mode == .columns ? columnLocation : nil) ?? url
             let name = Places.displayName(shown, copies: browser.services.copies, names: browser.services.folderNames)
             return (name, Trash.isTrash(shown) ? "trash" : "folder")
-        case .search, .recents, .duplicates:
+        case .search, .recents, .duplicates, .systemLocation:
             let title = ResultsTitle(destination)
             return (title?.window ?? "", title?.symbol ?? "")
         }
@@ -96,6 +99,7 @@ final class Pane {
 
 /// A pane's browser plus, in dual-pane mode, a slim header that shows where it is and whether it has focus.
 final class PaneHostViewController: NSViewController {
+    var systemPage: SystemLocationViewController?
     let browser: BrowserViewController
     let pathBar: PathBar
     var onActivate: (() -> Void)?

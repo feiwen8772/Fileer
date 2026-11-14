@@ -1929,6 +1929,22 @@
     "← Copy": "← 拷贝",
     "↑↓ Choose   ↩ Go   ⇥ Complete   esc Close": "↑↓ 选择   ↩ 前往   ⇥ 补全   esc 关闭",
     "✓ Full Disk Access is on. You’re all set.": "✓ 完全磁盘访问权限已打开。一切就绪。",
-    "Use Groups": "使用群组"
+    "Use Groups": "使用群组",
+    "Default Space": "默认空间",
+    "Pinned Items": "固定项目",
+    "New Sidebar Space…": "新建侧边栏空间…",
+    "Space Overview": "空间概览",
+    "New Category…": "新增分类…",
+    "Rename Category…": "重命名分类…",
+    "Remove Category": "移除分类",
+    "Add Link…": "添加链接…",
+    "Network": "网络",
+    "AirDrop": "隔空投送",
+    "Discover shared computers on your local network, or connect to a server.": "发现局域网中的共享电脑，或连接到服务器。",
+    "Choose files or folders, then select a nearby recipient in the system AirDrop panel.": "选择文件或文件夹，然后在系统隔空投送面板中选择附近的接收人。",
+    "Choose Files…": "选择文件…",
+    "Network discovery is unavailable. You can still connect to a server by address.": "网络发现不可用。你仍可通过地址连接服务器。",
+    "Couldn’t connect to the server.": "无法连接到服务器。",
+    "infoplist.NSLocalNetworkUsageDescription": "Strata 会发现局域网中的共享电脑，以便你浏览其中的文件。"
   }
 }

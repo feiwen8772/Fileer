@@ -2073,6 +2073,22 @@
     "← Copy": "← Kopier",
     "↑↓ Choose   ↩ Go   ⇥ Complete   esc Close": "↑↓ Velg   ↩ Gå   ⇥ Fullfør   esc Lukk",
     "✓ Full Disk Access is on. You’re all set.": "✓ Full disktilgang er på. Alt er klart.",
-    "Use Groups": "Bruk grupper"
+    "Use Groups": "Bruk grupper",
+    "Default Space": "Standardområde",
+    "Pinned Items": "Festede elementer",
+    "New Sidebar Space…": "Nytt sidefeltområde…",
+    "Space Overview": "Områdeoversikt",
+    "New Category…": "Ny kategori…",
+    "Rename Category…": "Endre kategorinavn…",
+    "Remove Category": "Fjern kategori",
+    "Add Link…": "Legg til lenke…",
+    "Network": "Nettverk",
+    "AirDrop": "AirDrop",
+    "Discover shared computers on your local network, or connect to a server.": "Finn delte datamaskiner på lokalnettverket, eller koble til en tjener.",
+    "Choose files or folders, then select a nearby recipient in the system AirDrop panel.": "Velg filer eller mapper, og velg deretter en mottaker i nærheten i systemets AirDrop-panel.",
+    "Choose Files…": "Velg filer…",
+    "Network discovery is unavailable. You can still connect to a server by address.": "Nettverkssøk er utilgjengelig. Du kan fortsatt koble til en tjener via adressen.",
+    "Couldn’t connect to the server.": "Kunne ikke koble til tjeneren.",
+    "infoplist.NSLocalNetworkUsageDescription": "Strata finner delte datamaskiner slik at du kan bla gjennom filene deres på lokalnettverket."
   }
 }

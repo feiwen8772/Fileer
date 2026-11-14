@@ -20,6 +20,7 @@ extension SavedDestination {
             return SavedDestination(kind: "search", query: text)
         case .recents: return SavedDestination(kind: "recents")
         case .duplicates: return SavedDestination(kind: "duplicates")
+        case .systemLocation: return nil
         }
     }
 

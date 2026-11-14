@@ -15,6 +15,9 @@ final class BrowserWindowController: NSWindowController, NSWindowDelegate {
     static let largeFilesQuery = "kind:file size:>500mb"
     private static let defaultContentSize = NSSize(width: 1240, height: 780)
 
+    var sidebarSpaceReader: @Sendable (SidebarSpace) async -> [(title: String, detail: String, entries: [FileEntry])] = SidebarSpaceReads.groups
+    var sidebarSpaceTask: Task<Void, Never>?
+    var sidebarSpaceRequest = UUID()
     let services: BrowserServices
     private(set) lazy var navigationGestures = BrowserNavigation(owner: self)
     private(set) var panes: [Pane]
@@ -98,6 +101,14 @@ final class BrowserWindowController: NSWindowController, NSWindowDelegate {
 
     /// The sidebar, path bar and search scope bar act on this window.
     private func wireBars() {
+        split.sidebar.onDefaultSpace = { [weak self] in
+            guard let self else { return }
+            sidebarSpaceTask?.cancel()
+            sidebarSpaceRequest = UUID()
+            browser.load(browser.directory ?? Places.home)
+        }
+        split.sidebar.onSpaceOverview = { [weak self] space in self?.showSidebarOverview(space) }
+        split.sidebar.onPinnedItem = { [weak self] url in self?.openSidebarPin(url) }
         split.sidebar.onSelect = { [weak self] target in self?.open(target) }
         split.sidebar.onOpenInNewTab = { [weak self] url in
             self?.openTab(at: url)
@@ -290,6 +301,7 @@ final class BrowserWindowController: NSWindowController, NSWindowDelegate {
                   panes.contains(where: { $0 === origin }) else { return }
             origin.browser.pending.selection = results.filter { $0.deletingLastPathComponent().lexicallyStandardized.fileViewKey == folder }
             switch origin.destination {
+            case .systemLocation: break
             case .folder: origin.browser.reloadFolder(nil)
             case .search, .recents, .duplicates: origin.search.run()
             }
@@ -336,7 +348,7 @@ final class BrowserWindowController: NSWindowController, NSWindowDelegate {
             let shown = (p.browser.mode == .columns ? p.columnLocation : nil) ?? url
             if bar.url != shown || bar.isShowingTitle { bar.url = shown }
             updateGitChrome(on: bar, destination: p.destination, location: shown)
-        case .search, .duplicates, .recents:
+        case .search, .duplicates, .recents, .systemLocation:
             // Results: the path bar keeps the pane's place, without a repository, under the results' title.
             guard let title = ResultsTitle(p.destination) else { return }
             if bar.url != p.location { bar.url = p.location }
@@ -368,6 +380,7 @@ final class BrowserWindowController: NSWindowController, NSWindowDelegate {
     private func open(_ target: SidebarTarget) {
         switch target {
         case .folder(let url): navigate(to: url)
+        case .systemLocation(let location): go(.systemLocation(location))
         case .recents: go(.recents)
         case .search(let saved): go(.search(saved.query, scope: saved.scopePath.flatMap { $0.isEmpty ? nil : URL(fileURLWithPath: $0) }))
         case .duplicates: go(.duplicates)
@@ -450,6 +463,20 @@ final class BrowserWindowController: NSWindowController, NSWindowDelegate {
         if p === pane { pathBar.cancelEditing() }
         p.navigate(to: target)
         switch target {
+        case .systemLocation(let location):
+            p.browser.showMessage(symbol: location.symbol, title: location.title)
+            let page = SystemLocationViewController(location: location, mounts: ServerMountSession(mounter: .live))
+            page.onOpen = { [weak self, weak p] url in
+                guard let self, !isClosed, let p, p.destination == .systemLocation(location),
+                      panes.contains(where: { $0 === p }) else { return }
+                go(.folder(url.lexicallyStandardized), in: p)
+            }
+            page.onConnect = { [weak self, weak p] in
+                guard let self, !isClosed, let p, panes.contains(where: { $0 === p }) else { return }
+                activate(p)
+                connectToServer(nil)
+            }
+            p.host.showSystemPage(page)
         case .folder(let url):
             p.location = url
             p.countsVisitOnLanding = countVisit
@@ -494,6 +521,12 @@ final class BrowserWindowController: NSWindowController, NSWindowDelegate {
             split.scopeBar.setSummary(pane.search.summary)
             split.scopeBar.isHidden = false
             split.noticeBar.hide()
+        case .systemLocation(let location):
+            setSearchField("")
+            showResultsTitle()
+            split.sidebar.highlight(.systemLocation(location))
+            split.scopeBar.isHidden = true
+            split.noticeBar.hide()
         case .duplicates, .recents:
             setSearchField("")
             showResultsTitle()
@@ -516,7 +549,7 @@ final class BrowserWindowController: NSWindowController, NSWindowDelegate {
     }
 
     func focusList() {
-        window?.makeFirstResponder(browser.focusView)
+        window?.makeFirstResponder(pane.host.systemPage?.view ?? browser.focusView)
     }
 
     private func setSearchField(_ text: String) {
@@ -678,6 +711,8 @@ final class BrowserWindowController: NSWindowController, NSWindowDelegate {
         guard !isClosed else { return }
         services.windowSession.windowWillClose(self)
         navigationGestures.cancel()
+        sidebarSpaceTask?.cancel()
+        sidebarSpaceTask = nil
         isClosed = true
         split.inspector.stopPreviewing()
         stopClipboardMonitoring()

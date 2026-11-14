@@ -2073,6 +2073,22 @@
     "← Copy": "← Copiar",
     "↑↓ Choose   ↩ Go   ⇥ Complete   esc Close": "↑↓ Escolher   ↩ Ir   ⇥ Completar   esc Fechar",
     "✓ Full Disk Access is on. You’re all set.": "✓ O Acesso total ao disco está ativado. Está tudo pronto.",
-    "Use Groups": "Usar grupos"
+    "Use Groups": "Usar grupos",
+    "Default Space": "Espaço predefinido",
+    "Pinned Items": "Itens afixados",
+    "New Sidebar Space…": "Novo espaço lateral…",
+    "Space Overview": "Visão geral do espaço",
+    "New Category…": "Nova categoria…",
+    "Rename Category…": "Mudar nome da categoria…",
+    "Remove Category": "Remover categoria",
+    "Add Link…": "Adicionar ligação…",
+    "Network": "Rede",
+    "AirDrop": "AirDrop",
+    "Discover shared computers on your local network, or connect to a server.": "Descubra computadores partilhados na rede local ou ligue-se a um servidor.",
+    "Choose files or folders, then select a nearby recipient in the system AirDrop panel.": "Escolha ficheiros ou pastas e selecione um destinatário próximo no painel AirDrop do sistema.",
+    "Choose Files…": "Escolher ficheiros…",
+    "Network discovery is unavailable. You can still connect to a server by address.": "A deteção de rede está indisponível. Pode ligar-se a um servidor pelo endereço.",
+    "Couldn’t connect to the server.": "Não foi possível ligar ao servidor.",
+    "infoplist.NSLocalNetworkUsageDescription": "O Strata deteta computadores partilhados para poder explorar os seus ficheiros na rede local."
   }
 }

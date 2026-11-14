@@ -2073,6 +2073,22 @@
     "← Copy": "← Kopyala",
     "↑↓ Choose   ↩ Go   ⇥ Complete   esc Close": "↑↓ Seç   ↩ Git   ⇥ Tamamla   esc Kapat",
     "✓ Full Disk Access is on. You’re all set.": "✓ Tam Disk Erişimi açık. Her şey hazır.",
-    "Use Groups": "Grupları kullan"
+    "Use Groups": "Grupları kullan",
+    "Default Space": "Varsayılan alan",
+    "Pinned Items": "Sabitlenmiş öğeler",
+    "New Sidebar Space…": "Yeni kenar çubuğu alanı…",
+    "Space Overview": "Alan genel görünümü",
+    "New Category…": "Yeni kategori…",
+    "Rename Category…": "Kategoriyi yeniden adlandır…",
+    "Remove Category": "Kategoriyi kaldır",
+    "Add Link…": "Bağlantı ekle…",
+    "Network": "Ağ",
+    "AirDrop": "AirDrop",
+    "Discover shared computers on your local network, or connect to a server.": "Yerel ağınızdaki paylaşılan bilgisayarları keşfedin veya bir sunucuya bağlanın.",
+    "Choose files or folders, then select a nearby recipient in the system AirDrop panel.": "Dosya veya klasör seçin, ardından sistem AirDrop panelinde yakındaki bir alıcıyı seçin.",
+    "Choose Files…": "Dosya Seç…",
+    "Network discovery is unavailable. You can still connect to a server by address.": "Ağ keşfi kullanılamıyor. Yine de adresle bir sunucuya bağlanabilirsiniz.",
+    "Couldn’t connect to the server.": "Sunucuya bağlanılamadı.",
+    "infoplist.NSLocalNetworkUsageDescription": "Strata, yerel ağınızdaki dosyalara göz atabilmeniz için paylaşılan bilgisayarları keşfeder."
   }
 }

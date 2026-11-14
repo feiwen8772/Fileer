@@ -46,7 +46,7 @@ import AppKit
         guard let pane else { return }
         switch pane.destination {
         case .search, .recents: break
-        case .folder, .duplicates: return
+        case .folder, .duplicates, .systemLocation: return
         }
         refreshPending = true
         if task == nil { scheduleRefresh() }
@@ -82,7 +82,7 @@ import AppKit
         switch p.destination {
         case .search, .recents: runSearch()
         case .duplicates: findDuplicates()
-        case .folder: break
+        case .folder, .systemLocation: break
         }
     }
 
@@ -127,7 +127,7 @@ import AppKit
                 await runQuery(text, in: scope, pane: p, generation: generation, target: target)
             case .recents:
                 await runRecents(in: p, generation: generation, target: target)
-            case .folder, .duplicates:
+            case .folder, .duplicates, .systemLocation:
                 break
             }
         }
@@ -432,7 +432,7 @@ import AppKit
     func affects(_ changes: IndexChanges) -> Bool {
         guard let pane else { return false }
         switch pane.destination {
-        case .folder, .duplicates:
+        case .folder, .duplicates, .systemLocation:
             return false
         case .recents:
             return changes.affectsRecents

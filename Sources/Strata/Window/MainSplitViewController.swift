@@ -24,7 +24,6 @@ final class MainSplitViewController: NSSplitViewController, ThemeSplitWindowCont
         let sidebarItem = NSSplitViewItem(sidebarWithViewController: sidebar)
         sidebarItem.minimumThickness = 180
         sidebarItem.maximumThickness = 320
-        sidebarItem.addBottomAlignedAccessoryViewController(SidebarFooterController())
 
         // Keep the split view itself out of the shared footer. Closing a pane can leave its old divider in the
         // backing layer, which otherwise shows through the footer in Columns and Disk Usage.

@@ -2361,6 +2361,22 @@
     "← Copy": "← Копіювати",
     "↑↓ Choose   ↩ Go   ⇥ Complete   esc Close": "↑↓ Вибрати   ↩ Перейти   ⇥ Доповнити   esc Закрити",
     "✓ Full Disk Access is on. You’re all set.": "✓ Повний доступ до диска увімкнено. Усе готово.",
-    "Use Groups": "Використовувати групи"
+    "Use Groups": "Використовувати групи",
+    "Default Space": "Типовий простір",
+    "Pinned Items": "Закріплені об’єкти",
+    "New Sidebar Space…": "Новий простір бічної панелі…",
+    "Space Overview": "Огляд простору",
+    "New Category…": "Нова категорія…",
+    "Rename Category…": "Перейменувати категорію…",
+    "Remove Category": "Вилучити категорію",
+    "Add Link…": "Додати посилання…",
+    "Network": "Мережа",
+    "AirDrop": "AirDrop",
+    "Discover shared computers on your local network, or connect to a server.": "Знайдіть спільні комп’ютери в локальній мережі або під’єднайтеся до сервера.",
+    "Choose files or folders, then select a nearby recipient in the system AirDrop panel.": "Виберіть файли чи папки, потім одержувача поблизу в системній панелі AirDrop.",
+    "Choose Files…": "Вибрати файли…",
+    "Network discovery is unavailable. You can still connect to a server by address.": "Виявлення мережі недоступне. Можна під’єднатися до сервера за адресою.",
+    "Couldn’t connect to the server.": "Не вдалося під’єднатися до сервера.",
+    "infoplist.NSLocalNetworkUsageDescription": "Strata виявляє спільні комп’ютери для перегляду їхніх файлів у локальній мережі."
   }
 }

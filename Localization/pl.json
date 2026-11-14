@@ -2361,6 +2361,22 @@
     "← Copy": "← Kopiuj",
     "↑↓ Choose   ↩ Go   ⇥ Complete   esc Close": "↑↓ Wybierz   ↩ Przejdź   ⇥ Uzupełnij   esc Zamknij",
     "✓ Full Disk Access is on. You’re all set.": "✓ Pełny dostęp do dysku jest włączony. Wszystko gotowe.",
-    "Use Groups": "Używaj grup"
+    "Use Groups": "Używaj grup",
+    "Default Space": "Przestrzeń domyślna",
+    "Pinned Items": "Przypięte rzeczy",
+    "New Sidebar Space…": "Nowa przestrzeń paska bocznego…",
+    "Space Overview": "Przegląd przestrzeni",
+    "New Category…": "Nowa kategoria…",
+    "Rename Category…": "Zmień nazwę kategorii…",
+    "Remove Category": "Usuń kategorię",
+    "Add Link…": "Dodaj łącze…",
+    "Network": "Sieć",
+    "AirDrop": "AirDrop",
+    "Discover shared computers on your local network, or connect to a server.": "Odkryj udostępnione komputery w sieci lokalnej lub połącz się z serwerem.",
+    "Choose files or folders, then select a nearby recipient in the system AirDrop panel.": "Wybierz pliki lub foldery, a następnie pobliskiego odbiorcę w systemowym panelu AirDrop.",
+    "Choose Files…": "Wybierz pliki…",
+    "Network discovery is unavailable. You can still connect to a server by address.": "Wykrywanie sieci jest niedostępne. Nadal możesz połączyć się z serwerem przez adres.",
+    "Couldn’t connect to the server.": "Nie udało się połączyć z serwerem.",
+    "infoplist.NSLocalNetworkUsageDescription": "Strata wykrywa udostępnione komputery, aby umożliwić przeglądanie ich plików w sieci lokalnej."
   }
 }

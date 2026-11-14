@@ -2363,6 +2363,22 @@
     "← Copy": "← Копировать",
     "↑↓ Choose   ↩ Go   ⇥ Complete   esc Close": "↑↓ Выбрать   ↩ Перейти   ⇥ Дополнить   esc Закрыть",
     "✓ Full Disk Access is on. You’re all set.": "✓ Доступ ко всему диску включен. Все готово.",
-    "Use Groups": "Использовать группы"
+    "Use Groups": "Использовать группы",
+    "Default Space": "Пространство по умолчанию",
+    "Pinned Items": "Закреплённые объекты",
+    "New Sidebar Space…": "Новое пространство боковой панели…",
+    "Space Overview": "Обзор пространства",
+    "New Category…": "Новая категория…",
+    "Rename Category…": "Переименовать категорию…",
+    "Remove Category": "Удалить категорию",
+    "Add Link…": "Добавить ссылку…",
+    "Network": "Сеть",
+    "AirDrop": "AirDrop",
+    "Discover shared computers on your local network, or connect to a server.": "Найдите общие компьютеры в локальной сети или подключитесь к серверу.",
+    "Choose files or folders, then select a nearby recipient in the system AirDrop panel.": "Выберите файлы или папки, затем получателя поблизости в системной панели AirDrop.",
+    "Choose Files…": "Выбрать файлы…",
+    "Network discovery is unavailable. You can still connect to a server by address.": "Обнаружение сети недоступно. Можно подключиться к серверу по адресу.",
+    "Couldn’t connect to the server.": "Не удалось подключиться к серверу.",
+    "infoplist.NSLocalNetworkUsageDescription": "Strata обнаруживает общие компьютеры для просмотра их файлов в локальной сети."
   }
 }

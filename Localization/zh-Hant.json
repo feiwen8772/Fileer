@@ -1929,6 +1929,22 @@
     "← Copy": "← 拷貝",
     "↑↓ Choose   ↩ Go   ⇥ Complete   esc Close": "↑↓ 選擇   ↩ 前往   ⇥ 自動完成   esc 關閉",
     "✓ Full Disk Access is on. You’re all set.": "✓「完全取用磁碟」權限已開啟。一切就緒。",
-    "Use Groups": "使用群組"
+    "Use Groups": "使用群組",
+    "Default Space": "預設空間",
+    "Pinned Items": "固定項目",
+    "New Sidebar Space…": "新增側邊欄空間…",
+    "Space Overview": "空間總覽",
+    "New Category…": "新增分類…",
+    "Rename Category…": "重新命名分類…",
+    "Remove Category": "移除分類",
+    "Add Link…": "加入連結…",
+    "Network": "網路",
+    "AirDrop": "AirDrop",
+    "Discover shared computers on your local network, or connect to a server.": "探索區域網路中的共享電腦，或連接伺服器。",
+    "Choose files or folders, then select a nearby recipient in the system AirDrop panel.": "選擇檔案或資料夾，然後在系統 AirDrop 面板中選擇附近的接收者。",
+    "Choose Files…": "選擇檔案…",
+    "Network discovery is unavailable. You can still connect to a server by address.": "無法探索網路。你仍可透過位址連接伺服器。",
+    "Couldn’t connect to the server.": "無法連接伺服器。",
+    "infoplist.NSLocalNetworkUsageDescription": "Strata 會探索區域網路中的共享電腦，讓你瀏覽其中的檔案。"
   }
 }

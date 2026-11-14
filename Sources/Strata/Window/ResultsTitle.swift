@@ -18,6 +18,10 @@ struct ResultsTitle: Equatable {
                 : String(localized: "“\(text)”", comment: "Path bar title while searching: the search text in quotes")
             window = isLargeFiles ? largeFiles : String(localized: "Search: \(text)", comment: "Window title while searching; the search text")
             symbol = "magnifyingglass"
+        case .systemLocation(let location):
+            pathBar = location.title
+            window = pathBar
+            symbol = location.symbol
         case .recents:
             pathBar = String(localized: "Recents", comment: "Title of the view listing recently used files")
             window = pathBar

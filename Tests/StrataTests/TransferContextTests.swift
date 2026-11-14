@@ -307,17 +307,29 @@ struct TransferContextTests {
         #expect(second.snapshot() == ["start/", "state/", "state/Caches/", "visited/"])
     }
 
-    @Test func bothSidebarDropModesUseTheWindowQueue() async throws {
+    @Test(arguments: [false, true]) func bothSidebarDropModesUseTheWindowQueue(_ customSpace: Bool) async throws {
         let tree = try TestTree("a.txt", "ab.txt", "places/", "folders/", "state/")
         let env = try Environment(tree)
         let services = env.services
         let sidebar = SidebarViewController(services: services)
         _ = sidebar.view
         let folderTree = try #require(sidebar.children.compactMap { $0 as? FolderTreeController }.first)
+        if customSpace {
+            sidebar.activeSpaceID = try #require(services.sidebarSpaces.create("Custom"))
+            sidebar.spacesChanged()
+        }
         let drag = FileDrag(tree.url("a.txt"))
         defer { drag.draggingPasteboard.releaseGlobally() }
         let outline = NSOutlineView()
-        let place = SidebarItem(title: "places", target: .folder(tree.url("places")), symbol: "folder")
+        let place: SidebarItem
+        if let id = sidebar.activeSpaceID {
+            services.sidebarSpaces.createGroup("Drop targets", in: id)
+            let group = try #require(services.sidebarSpaces.space(id)?.groups.first)
+            services.sidebarSpaces.pin([tree.url("places/")], in: id, section: group.id.uuidString)
+            place = try #require(sidebar.sections.first { $0.id == group.id.uuidString }?.items.first)
+        } else {
+            place = SidebarItem(title: "places", target: .folder(tree.url("places")), symbol: "folder")
+        }
         #expect(sidebar.outlineView(outline, acceptDrop: drag, item: place, childIndex: NSOutlineViewDropOnItemIndex))
         let node = FolderNode(url: tree.url("folders"), title: "folders")
         #expect(folderTree.outlineView(outline, acceptDrop: drag, item: node, childIndex: NSOutlineViewDropOnItemIndex))

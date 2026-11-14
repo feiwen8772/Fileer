@@ -2073,6 +2073,22 @@
     "← Copy": "← Kopieer",
     "↑↓ Choose   ↩ Go   ⇥ Complete   esc Close": "↑↓ Kies   ↩ Ga   ⇥ Vul aan   esc Sluit",
     "✓ Full Disk Access is on. You’re all set.": "✓ Volledige schijftoegang staat aan. Je bent klaar.",
-    "Use Groups": "Gebruik groepen"
+    "Use Groups": "Gebruik groepen",
+    "Default Space": "Standaardruimte",
+    "Pinned Items": "Vastgemaakte onderdelen",
+    "New Sidebar Space…": "Nieuwe zijbalkruimte…",
+    "Space Overview": "Ruimteoverzicht",
+    "New Category…": "Nieuwe categorie…",
+    "Rename Category…": "Categorienaam wijzigen…",
+    "Remove Category": "Categorie verwijderen",
+    "Add Link…": "Link toevoegen…",
+    "Network": "Netwerk",
+    "AirDrop": "AirDrop",
+    "Discover shared computers on your local network, or connect to a server.": "Ontdek gedeelde computers op je lokale netwerk of maak verbinding met een server.",
+    "Choose files or folders, then select a nearby recipient in the system AirDrop panel.": "Kies bestanden of mappen en selecteer daarna een ontvanger in de buurt in het AirDrop-systeempaneel.",
+    "Choose Files…": "Kies bestanden…",
+    "Network discovery is unavailable. You can still connect to a server by address.": "Netwerkdetectie is niet beschikbaar. Je kunt nog steeds verbinden via een serveradres.",
+    "Couldn’t connect to the server.": "Verbinding met de server mislukt.",
+    "infoplist.NSLocalNetworkUsageDescription": "Strata ontdekt gedeelde computers zodat je hun bestanden op je lokale netwerk kunt bekijken."
   }
 }

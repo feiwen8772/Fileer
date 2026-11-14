@@ -63,6 +63,7 @@ final class BrowserServices {
     lazy var workspaces = Workspaces(services: self)
     lazy var windowSession = WindowSession(services: self)
     lazy var connectionSettings = ServerConnectionSettings(preferences: preferences)
+    lazy var sidebarSpaces = SidebarSpaces(preferences: preferences)
     lazy var savedSearches = SavedSearches(preferences: preferences)
     lazy var folderViews = FolderViewSettings(preferences: preferences)
     lazy var viewOptions = ViewOptionsWindowController(settings: folderViews)

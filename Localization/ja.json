@@ -1929,6 +1929,22 @@
     "← Copy": "← コピー",
     "↑↓ Choose   ↩ Go   ⇥ Complete   esc Close": "↑↓ 選択   ↩ 移動   ⇥ 補完   esc 閉じる",
     "✓ Full Disk Access is on. You’re all set.": "✓ フルディスクアクセスはオンです。準備完了です。",
-    "Use Groups": "グループを使用"
+    "Use Groups": "グループを使用",
+    "Default Space": "デフォルトスペース",
+    "Pinned Items": "ピン留め項目",
+    "New Sidebar Space…": "新規サイドバースペース…",
+    "Space Overview": "スペースの概要",
+    "New Category…": "新規カテゴリ…",
+    "Rename Category…": "カテゴリ名を変更…",
+    "Remove Category": "カテゴリを削除",
+    "Add Link…": "リンクを追加…",
+    "Network": "ネットワーク",
+    "AirDrop": "AirDrop",
+    "Discover shared computers on your local network, or connect to a server.": "ローカルネットワーク上の共有コンピュータを検出するか、サーバに接続します。",
+    "Choose files or folders, then select a nearby recipient in the system AirDrop panel.": "ファイルやフォルダを選択し、システムのAirDropパネルで近くの受信者を選択します。",
+    "Choose Files…": "ファイルを選択…",
+    "Network discovery is unavailable. You can still connect to a server by address.": "ネットワークを検出できません。アドレスでサーバに接続できます。",
+    "Couldn’t connect to the server.": "サーバに接続できませんでした。",
+    "infoplist.NSLocalNetworkUsageDescription": "Strataはローカルネットワーク上の共有コンピュータを検出し、そのファイルを閲覧できるようにします。"
   }
 }

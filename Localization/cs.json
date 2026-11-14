@@ -2217,6 +2217,22 @@
     "← Copy": "← Kopírovat",
     "↑↓ Choose   ↩ Go   ⇥ Complete   esc Close": "↑↓ Vybrat   ↩ Otevřít   ⇥ Doplnit   esc Zavřít",
     "✓ Full Disk Access is on. You’re all set.": "✓ Plný přístup k disku je zapnutý. Vše je připraveno.",
-    "Use Groups": "Použít skupiny"
+    "Use Groups": "Použít skupiny",
+    "Default Space": "Výchozí prostor",
+    "Pinned Items": "Připnuté položky",
+    "New Sidebar Space…": "Nový prostor bočního panelu…",
+    "Space Overview": "Přehled prostoru",
+    "New Category…": "Nová kategorie…",
+    "Rename Category…": "Přejmenovat kategorii…",
+    "Remove Category": "Odstranit kategorii",
+    "Add Link…": "Přidat odkaz…",
+    "Network": "Síť",
+    "AirDrop": "AirDrop",
+    "Discover shared computers on your local network, or connect to a server.": "Vyhledejte sdílené počítače v místní síti nebo se připojte k serveru.",
+    "Choose files or folders, then select a nearby recipient in the system AirDrop panel.": "Vyberte soubory nebo složky a poté blízkého příjemce v systémovém panelu AirDrop.",
+    "Choose Files…": "Vybrat soubory…",
+    "Network discovery is unavailable. You can still connect to a server by address.": "Vyhledávání v síti není dostupné. K serveru se můžete připojit pomocí adresy.",
+    "Couldn’t connect to the server.": "K serveru se nepodařilo připojit.",
+    "infoplist.NSLocalNetworkUsageDescription": "Strata vyhledává sdílené počítače, abyste mohli procházet jejich soubory v místní síti."
   }
 }

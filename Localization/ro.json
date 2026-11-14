@@ -2217,6 +2217,22 @@
     "← Copy": "← Copiază",
     "↑↓ Choose   ↩ Go   ⇥ Complete   esc Close": "↑↓ Alege   ↩ Mergi   ⇥ Completează   esc Închide",
     "✓ Full Disk Access is on. You’re all set.": "✓ Accesul complet la disc este activat. Totul este gata.",
-    "Use Groups": "Folosește grupuri"
+    "Use Groups": "Folosește grupuri",
+    "Default Space": "Spațiu implicit",
+    "Pinned Items": "Elemente fixate",
+    "New Sidebar Space…": "Spațiu lateral nou…",
+    "Space Overview": "Prezentare spațiu",
+    "New Category…": "Categorie nouă…",
+    "Rename Category…": "Redenumește categoria…",
+    "Remove Category": "Elimină categoria",
+    "Add Link…": "Adaugă link…",
+    "Network": "Rețea",
+    "AirDrop": "AirDrop",
+    "Discover shared computers on your local network, or connect to a server.": "Descoperă computere partajate în rețeaua locală sau conectează-te la un server.",
+    "Choose files or folders, then select a nearby recipient in the system AirDrop panel.": "Alege fișiere sau dosare, apoi un destinatar din apropiere în panoul AirDrop al sistemului.",
+    "Choose Files…": "Alege fișiere…",
+    "Network discovery is unavailable. You can still connect to a server by address.": "Descoperirea rețelei nu este disponibilă. Te poți conecta la un server prin adresă.",
+    "Couldn’t connect to the server.": "Conectarea la server a eșuat.",
+    "infoplist.NSLocalNetworkUsageDescription": "Strata descoperă computere partajate pentru a putea explora fișierele lor în rețeaua locală."
   }
 }
