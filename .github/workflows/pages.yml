@@ -1,6 +1,6 @@
 name: Website
 
-# Publishes stratafiles.app to GitHub Pages: site/ plus the README's screenshots, assembled by scripts/site.sh.
+# Checks the inherited website. Fileer publishes it only when FILEER_PUBLISH_WEBSITE is explicitly enabled.
 # Checks pull requests before publishing main to GitHub Pages.
 on:
   push:
@@ -76,7 +76,7 @@ jobs:
 
       - name: Assemble the site
         env:
-          SITE_PREVIOUS_ORIGIN: ${{ github.event_name != 'pull_request' && 'https://stratafiles.app' || '' }}
+          SITE_PREVIOUS_ORIGIN: ${{ vars.FILEER_SITE_PREVIOUS_ORIGIN || '' }}
         run: scripts/site.sh
 
       - name: Install browser checks
@@ -89,13 +89,13 @@ jobs:
         run: npm test --prefix Tests/site
 
       - name: Upload
-        if: github.event_name != 'pull_request'
+        if: github.event_name != 'pull_request' && vars.FILEER_PUBLISH_WEBSITE == 'true'
         uses: actions/upload-pages-artifact@fc324d3547104276b827a68afc52ff2a11cc49c9 # v5.0.0
         with:
           path: build/site
 
   deploy:
-    if: github.event_name != 'pull_request'
+    if: github.event_name != 'pull_request' && vars.FILEER_PUBLISH_WEBSITE == 'true'
     needs: build
     runs-on: ubuntu-latest
     timeout-minutes: 10
