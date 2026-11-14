@@ -239,7 +239,7 @@ package nonisolated enum Archiver {
     }
 
     private static func pastLimits(_ archive: URL) -> Failure {
-        Failure(message: String(localized: "“\(archive.lastPathComponent)” goes past the limits Strata sets for reading archives, so it wasn’t extracted."))
+        Failure(message: String(localized: "“\(archive.lastPathComponent)” goes past the limits Fileer sets for reading archives, so it wasn’t extracted."))
     }
 
     private static func passwordProtected(_ archive: URL) -> Failure {

@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# Builds build/Strata.app.
+# Builds build/Fileer.app.
 #
 # Signs with $STRATA_SIGNING_IDENTITY, else the first "Developer ID Application" identity in your keychain, else ad-hoc.
 # A stable signature matters: macOS ties privacy grants (Desktop, Documents, Full Disk Access) to it, so ad-hoc builds
@@ -24,7 +24,7 @@ fi
 if [[ -n "${STRATA_BUILD_NUMBER:-}" && ! "$STRATA_BUILD_NUMBER" =~ ^[0-9]+$ ]]; then
   echo "STRATA_BUILD_NUMBER must be digits" >&2; exit 1
 fi
-swift build -c "$config" --arch arm64 --product Strata
+swift build -c "$config" --arch arm64 --product Fileer
 swift build -c "$config" --arch arm64 --product StrataCLI
 swift build -c "$config" --arch arm64 --product StrataArchiveService
 swift build -c "$config" --arch arm64 --product StrataTableWorker
@@ -33,10 +33,10 @@ swift build -c "$config" --arch arm64 --product StrataArchiveWorker
 swift build -c "$config" --arch arm64 --product StrataResourceCheck
 bins="$(swift build -c "$config" --arch arm64 --show-bin-path)"
 
-app=build/Strata.app
+app=build/Fileer.app
 rm -rf "$app"
 mkdir -p "$app/Contents/MacOS" "$app/Contents/Resources" "$app/Contents/Helpers"
-cp "$bins/Strata" "$app/Contents/MacOS/Strata"
+cp "$bins/Fileer" "$app/Contents/MacOS/Fileer"
 # Sparkle (updates) travels in Frameworks; the binary looks for it there.
 sparkle=$(find .build/artifacts -path "*Sparkle.xcframework/macos-*/Sparkle.framework" -maxdepth 6 -type d 2>/dev/null | head -1)
 if [[ -n "$sparkle" ]]; then
@@ -44,13 +44,13 @@ if [[ -n "$sparkle" ]]; then
   ditto "$sparkle" "$app/Contents/Frameworks/Sparkle.framework"
   # The XPC services are for sandboxed apps; Strata isn't one.
   rm -rf "$app/Contents/Frameworks/Sparkle.framework/Versions/B/XPCServices" "$app/Contents/Frameworks/Sparkle.framework/XPCServices"
-  install_name_tool -add_rpath "@executable_path/../Frameworks" "$app/Contents/MacOS/Strata" 2>/dev/null || true
+  install_name_tool -add_rpath "@executable_path/../Frameworks" "$app/Contents/MacOS/Fileer" 2>/dev/null || true
 fi
 # The command-line tool lives in Helpers: "strata" would clash with "Strata" in MacOS on a case-insensitive disk.
 cp "$bins/StrataCLI" "$app/Contents/Helpers/strata"
 # SwiftPM resources are shipped with the app, so theme discovery also works away from the checkout.
-cp -R "$bins/Strata_StrataTheme.bundle" "$app/Contents/Resources/Strata_StrataTheme.bundle"
-cp -R "$bins/Strata_StrataPreviews.bundle" "$app/Contents/Resources/Strata_StrataPreviews.bundle"
+cp -R "$bins/Fileer_StrataTheme.bundle" "$app/Contents/Resources/Fileer_StrataTheme.bundle"
+cp -R "$bins/Fileer_StrataPreviews.bundle" "$app/Contents/Resources/Fileer_StrataPreviews.bundle"
 python3 scripts/check-app-resources.py "$app" "$bins/StrataResourceCheck" Tests/PreviewDocuments/07-Issue36-Mermaid.md
 # Credits for the third-party software Strata includes or builds on (Sparkle, libarchive) travel with the app.
 cp THIRD_PARTY_NOTICES.md "$app/Contents/Resources/THIRD_PARTY_NOTICES.md"
@@ -111,8 +111,8 @@ echo "Built $app ($config, signed $signer)"
 if [[ "${2:-}" == "--open" ]]; then
   # Quit the running copy and wait for it to exit, so `open` launches this build instead of reactivating the old one.
   osascript -e 'tell application id "dev.strata.app" to quit' >/dev/null 2>&1 || true
-  for _ in $(seq 1 50); do pgrep -x Strata >/dev/null || break; sleep 0.1; done
-  pkill -x Strata 2>/dev/null || true
-  while pgrep -x Strata >/dev/null; do sleep 0.1; done
+  for _ in $(seq 1 50); do pgrep -x Fileer >/dev/null || break; sleep 0.1; done
+  pkill -x Fileer 2>/dev/null || true
+  while pgrep -x Fileer >/dev/null; do sleep 0.1; done
   open "$app"
 fi

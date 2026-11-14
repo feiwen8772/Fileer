@@ -114,7 +114,7 @@ extension SidebarViewController: NSMenuDelegate {
     @objc private func removeServer(_ sender: NSMenuItem) {
         guard let id = sender.representedObject as? String, let server = services.remote.servers.server(id: id), let window = view.window else { return }
         let alert = NSAlert()
-        alert.messageText = String(localized: "Remove “\(server.name)” from Strata?", comment: "A saved server's name")
+        alert.messageText = String(localized: "Remove “\(server.name)” from Fileer?", comment: "A saved server's name")
         alert.informativeText = server.kind == .s3
             ? String(localized: "Its secret key is deleted from your keychain. Nothing in the bucket changes.")
             : String(localized: "Nothing on the server changes.")

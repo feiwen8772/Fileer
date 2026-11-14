@@ -30,7 +30,7 @@ struct NewWindowFolderSettings: View {
                     Button("Choose Folder…", action: chooseFolder)
                 }
             }
-            Text("If the folder is unavailable, Strata opens your home folder.")
+            Text("If the folder is unavailable, Fileer opens your home folder.")
                 .font(.callout)
                 .foregroundStyle(.secondary)
         }

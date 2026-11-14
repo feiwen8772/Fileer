@@ -194,15 +194,15 @@ package nonisolated enum PlanError: LocalizedError {
             switch AIModel.status {
             case .available: break
             case .appleIntelligenceNotEnabled:
-                return String(localized: "Strata’s built-in rules don’t cover this request. Turn on Apple Intelligence to plan anything you can describe.")
+                return String(localized: "Fileer’s built-in rules don’t cover this request. Turn on Apple Intelligence to plan anything you can describe.")
             case .deviceNotEligible:
-                return String(localized: "Strata’s built-in rules don’t cover this request. Try describing it like “rename these photos by date taken” or “move PDFs into a folder named Invoices”.",
+                return String(localized: "Fileer’s built-in rules don’t cover this request. Try describing it like “rename these photos by date taken” or “move PDFs into a folder named Invoices”.",
                               comment: "Keep the quoted examples in English: the built-in rules only understand English requests")
             default:
-                return String(localized: "Strata’s built-in rules don’t cover this request. \(AIModel.explanation ?? "")",
+                return String(localized: "Fileer’s built-in rules don’t cover this request. \(AIModel.explanation ?? "")",
                               comment: "Followed by why Apple Intelligence can’t be used")
             }
-            return String(localized: "Strata couldn’t turn this request into file operations. Try rephrasing it.")
+            return String(localized: "Fileer couldn’t turn this request into file operations. Try rephrasing it.")
         case .nothingSelected: return String(localized: "Select the files you want to change first.")
         }
     }

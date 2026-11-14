@@ -151,7 +151,7 @@ nonisolated package enum SecureStorage {
             kSecAttrLabel: service,
             kSecAttrAccessible: kSecAttrAccessibleAfterFirstUnlockThisDeviceOnly,
             kSecAttrSynchronizable: false,
-            kSecAttrDescription: String(localized: "Encrypts Strata's search index and history",
+            kSecAttrDescription: String(localized: "Encrypts Fileer's search index and history",
                                         comment: "Keychain item description, shown in Keychain Access"),
             kSecValueData: key.withUnsafeBytes { Data($0) },
         ]

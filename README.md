@@ -1,8 +1,8 @@
 <p align="center">
-  <img src="docs/icon.png" width="128" height="128" alt="Strata icon">
+  <img src="docs/icon.png" width="128" height="128" alt="Fileer icon">
 </p>
 
-<h1 align="center">Strata Files</h1>
+<h1 align="center">Fileer</h1>
 
 <p align="center">
   <b>The file manager your Mac deserves.</b><br>
@@ -11,7 +11,7 @@
 </p>
 
 <p align="center">
-  <a href="https://github.com/cristipufu/strata-files/releases/latest"><img src="https://img.shields.io/github/v/release/cristipufu/strata-files?style=flat&amp;label=release&amp;color=8150cf" alt="Latest release" height="20"></a>
+  <a href="https://github.com/feiwen8772/Fileer/releases/latest"><img src="https://img.shields.io/github/v/release/feiwen8772/Fileer?style=flat&amp;label=release&amp;color=8150cf" alt="Latest release" height="20"></a>
   <a href="#get-strata"><img src="https://img.shields.io/badge/macOS-26%2B-555555?style=flat&amp;logo=apple&amp;logoColor=white" alt="Requires macOS 26 or later" height="20"></a>
   <a href="#get-strata"><img src="https://img.shields.io/badge/Apple%20silicon-555555?style=flat" alt="For Macs with Apple silicon" height="20"></a>
 </p>
@@ -23,15 +23,15 @@
 <!-- readme-languages:end -->
 
 <p align="center">
-  <img src="docs/screenshots/themes.png" alt="Strata with demo folders in Blue, Teal, Sand, Purple and native System Light" width="900">
+  <img src="docs/screenshots/themes.png" alt="Fileer with demo folders in Blue, Teal, Sand, Purple and native System Light" width="900">
 </p>
 
 ---
 
-## Why Strata
+## Why Fileer
 
 Finder is fine until you need to find something, figure out what's eating your disk, or move a few hundred files
-without a beachball. Strata keeps everything you already know: the look, the shortcuts, drag and drop, Quick Look,
+without a beachball. Fileer keeps everything you already know: the look, the shortcuts, drag and drop, Quick Look,
 tabs. Then it adds what you've been missing:
 
 - **Search that keeps up with you.** Every file in your home folder and Applications, searchable as you type.
@@ -47,7 +47,7 @@ tabs. Then it adds what you've been missing:
 ## Find anything, instantly
 
 Type a name, use precise filters, or just say what you mean: *"videos bigger than 500 MB"*,
-*"pdfs from last month"*. Strata understands plain English, shows you how it read your search, and answers
+*"pdfs from last month"*. Fileer understands plain English, shows you how it read your search, and answers
 before you finish typing. Go further with `regex:` and **Match Case**, or ask Spotlight about what's in the files:
 `camera:iphone`, `width:>1920`, `duration:>10m`, *"photos taken with iPhone"*. Save any search to the sidebar and it
 stays live as files change.
@@ -56,12 +56,12 @@ stays live as files change.
 
 ## Jump anywhere with ⌘K
 
-One shortcut opens a command palette that knows your most-used folders, the files in your index and Strata's
+One shortcut opens a command palette that knows your most-used folders, the files in your index and Fileer's
 commands. Type `acme-web/` to list a project's contents without opening a single window, or plain English like
 `pdfs from last week`.
 
 Prefer a search box like Windows has? Turn on Settings ▸ General ▸ Search box in the Dock: a box sits in the Dock next
-to Strata's icon and finds what ⌘K finds, plus your apps and documents by what they say, from any app.
+to Fileer's icon and finds what ⌘K finds, plus your apps and documents by what they say, from any app.
 
 <p align="center"><img src="docs/screenshots/palette.png" alt="The command palette listing the contents of a project" width="820"></p>
 
@@ -147,7 +147,7 @@ needed. The [theme guide](docs/themes.md) explains the format and the light/dark
 ### Repositories
 
 - **Git at a glance.** File status appears beside each file, and the current branch stays in the path bar.
-- **Project tools in the inspector.** Strata recognizes Node, Rust, Swift, .NET, Python, Go and more. Run a project's
+- **Project tools in the inspector.** Fileer recognizes Node, Rust, Swift, .NET, Python, Go and more. Run a project's
   scripts or reclaim space from build folders such as `node_modules`; cleanup sends them to the Trash.
 - **Previews alongside your files.** Read code, Markdown, HTML, JSON, CSV, SQLite databases and archives in the inspector.
 
@@ -200,7 +200,7 @@ Works with **Docker Desktop, OrbStack, Colima, Podman and Rancher Desktop**.
 | **Your sidebar** | Drag folders into Favorites, reorder them, and eject disks right from the sidebar, or switch it to a tree of every folder. Windows and tabs come back where you left them. |
 | **Path bar** | Type a path, `github/acme`, or just a folder's name: matching folders are suggested as you type. |
 | **Workspaces** | Save a set of tabs and panes, with their views, and reopen them together from the sidebar, ⌘K or `strata -w`. Folders on network shares and servers connect again. |
-| **Ask Strata** | Describe a bulk change (`rename these photos by date taken`) and review the plan before anything happens. Runs on your Mac: built-in rules handle common requests, and Apple Intelligence handles the rest. |
+| **Ask Fileer** | Describe a bulk change (`rename these photos by date taken`) and review the plan before anything happens. Runs on your Mac: built-in rules handle common requests, and Apple Intelligence handles the rest. |
 | **Summaries** | Get the gist of a PDF or document in the inspector: a short summary written by Apple Intelligence, or the key sentences without it. Nothing ever leaves your Mac. |
 | **Command line** | Install it from Settings, then `strata .` opens the current folder and `strata -s "invoice pdf"` searches from your terminal. |
 
@@ -213,19 +213,19 @@ Click **Keyboard Shortcuts** at the bottom of the sidebar, or press ⌘/.
 
 ## Private by design
 
-Strata runs entirely on your Mac. The search index, summaries and AI features are local: no accounts, no tracking,
+Fileer runs entirely on your Mac. The search index, summaries and AI features are local: no accounts, no tracking,
 no cloud. Its file index, content index and history are encrypted on disk with a key in your keychain. And a
-folder you browse can't run its own code just because you looked at it: Strata switches off the git features a
+folder you browse can't run its own code just because you looked at it: Fileer switches off the git features a
 downloaded repository could use to do that. It only goes online to check for updates (its own, if you allow it, and
 other apps' when you ask it to) and to the servers you connect to. Containers' and servers' files are read as you
-browse and cleared when Strata quits; SFTP logs in with your own SSH setup, and an S3 secret key stays in your keychain.
+browse and cleared when Fileer quits; SFTP logs in with your own SSH setup, and an S3 secret key stays in your keychain.
 
-Read the [Strata app Privacy Policy](https://stratafiles.app/privacy/) for details about local data, storage,
+Read the [Fileer app Privacy Policy](https://stratafiles.app/privacy/) for details about local data, storage,
 permissions, network connections and your controls.
 
 ## Translations
 
-Strata comes in 22 languages and follows your Mac's (or pick one in Settings ▸ General). Each language is one plain
+Fileer comes in 22 languages and follows your Mac's (or pick one in Settings ▸ General). Each language is one plain
 JSON file in [Localization](Localization): improving a translation or adding a language is a pull request, no Xcode
 needed. [Localization/README.md](Localization/README.md) has the four steps.
 
@@ -234,47 +234,41 @@ The README translations share this English source and are generated from catalog
 
 <a id="get-strata"></a>
 
-## Get Strata
+## Get Fileer
 
-Download the latest version from [GitHub Releases](https://github.com/cristipufu/strata-files/releases/latest), open the disk
-image and drag Strata to Applications. It needs an Apple silicon Mac running **macOS 26**. Releases are signed and
-notarized by Apple, so Strata opens like any other app. It updates itself: **Strata ▸ Check for Updates…**, or
-automatically if you allow it (updates are signed and checked before they're installed).
+Download the latest version from [GitHub Releases](https://github.com/feiwen8772/Fileer/releases/latest), open the disk
+image and drag Fileer to Applications. It needs an Apple silicon Mac running **macOS 26**.
 
-Homebrew:
-
-```sh
-brew install --cask cristipufu/tap/strata
-```
+Fileer v0.1 is an unnotarized test release. Its updates are cryptographically signed and downloaded only from this repository. Use **Fileer ▸ Check for Updates…**, or enable automatic updates.
 
 Or build it yourself with the Swift toolchain (Xcode or the Command Line Tools):
 
 ```sh
-git clone https://github.com/cristipufu/strata-files.git
-cd strata-files
+git clone https://github.com/feiwen8772/Fileer.git
+cd Fileer
 scripts/build.sh release --open
 ```
 
-For the best experience, give Strata **Full Disk Access** in System Settings ▸ Privacy & Security, so it can search
-and measure everything without asking folder by folder. Strata walks you through it on first launch.
+For the best experience, give Fileer **Full Disk Access** in System Settings ▸ Privacy & Security, so it can search
+and measure everything without asking folder by folder. Fileer walks you through it on first launch.
 
 ## Releasing
 
-Push a version tag and the [Release workflow](.github/workflows/release.yml) builds Strata on a Mac, signs it with the
-Developer ID certificate, has Apple notarize it, and publishes a GitHub Release with `Strata.dmg`, `Strata.zip`, their
-checksums and `appcast.xml`, the signed update feed installed copies check. The release notes come from
-`docs/release-notes/<version>.md` when there is one, and the update window shows them too.
+The [Release workflow](.github/workflows/release.yml) runs the full tests and localization checks before publishing `Fileer.dmg`, `Fileer.zip`, checksums and the signed `appcast.xml`. The initial release is an explicitly authorized unnotarized test build. Set Apple Developer signing secrets for signed and notarized releases. Release notes live in `docs/release-notes/<version>.md`.
 
 ```sh
-git tag v0.2.0 && git push origin v0.2.0
+git tag v0.1 && git push origin v0.1
 ```
 
 ## License
 
-Strata is open source under the [MIT License](LICENSE).
+Fileer is open source under the [MIT License](LICENSE).
 
 ---
 
 <p align="center">
-  Found a bug or have an idea? <a href="https://github.com/cristipufu/strata-files/issues">Open an issue</a>.
+  Found a bug or have an idea? <a href="https://github.com/feiwen8772/Fileer/issues">Open an issue</a>.
 </p>
+
+
+Fileer is based on [Strata](https://github.com/cristipufu/strata-files) by Cristi Pufu and contributors. The original MIT license and third-party notices are retained.

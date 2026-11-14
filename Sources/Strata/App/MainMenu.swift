@@ -15,8 +15,8 @@ enum MainMenu {
     }
 
     private static func appMenu() -> NSMenuItem {
-        submenu("Strata", [
-            item("About Strata", #selector(NSApplication.orderFrontStandardAboutPanel(_:))),
+        submenu("Fileer", [
+            item("About Fileer", #selector(NSApplication.orderFrontStandardAboutPanel(_:))),
             StrataCommand.checkForUpdates.menuItem(),
             .separator(),
             StrataCommand.showSettings.menuItem(),
@@ -25,11 +25,11 @@ enum MainMenu {
             .separator(),
             servicesItem(),
             .separator(),
-            item("Hide Strata", #selector(NSApplication.hide(_:)), "h"),
+            item("Hide Fileer", #selector(NSApplication.hide(_:)), "h"),
             item("Hide Others", #selector(NSApplication.hideOtherApplications(_:)), "h", [.command, .option]),
             item("Show All", #selector(NSApplication.unhideAllApplications(_:))),
             .separator(),
-            item("Quit Strata", #selector(NSApplication.terminate(_:)), "q"),
+            item("Quit Fileer", #selector(NSApplication.terminate(_:)), "q"),
         ])
     }
 

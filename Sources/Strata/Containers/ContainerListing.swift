@@ -207,7 +207,7 @@ extension ContainerFiles {
         let message: String = switch error as? ContainerAPIError {
         case .transport(.connect)?: String(localized: "\(engine.name) isn’t running.", comment: "Container files: the engine (Docker Desktop, OrbStack…) can’t be reached")
         case .transport(.timeout)?: String(localized: "\(engine.name) didn’t answer in time.", comment: "Container files: the engine took too long")
-        default: String(localized: "Strata couldn’t list the containers on \(engine.name).", comment: "Containers folder: the engine's list couldn't be read; placeholder: Docker Desktop, OrbStack…")
+        default: String(localized: "Fileer couldn’t list the containers on \(engine.name).", comment: "Containers folder: the engine's list couldn't be read; placeholder: Docker Desktop, OrbStack…")
         }
         NotificationCenter.default.post(name: .containerCopyProblem, object: nil,
                                         userInfo: ["folder": folder, "message": message, "copyRoot": copyRoot])
@@ -223,7 +223,7 @@ extension ContainerFiles {
         case .transport(.timeout)?:
             return String(localized: "\(source.engineName) didn’t answer in time.", comment: "Container files: the engine took too long")
         default:
-            return String(localized: "Strata couldn’t read this folder from “\(source.name)”.", comment: "Container files: listing a folder failed")
+            return String(localized: "Fileer couldn’t read this folder from “\(source.name)”.", comment: "Container files: listing a folder failed")
         }
     }
 }

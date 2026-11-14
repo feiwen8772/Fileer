@@ -95,7 +95,7 @@ enum ContainerControl {
         let shell = "command -v bash >/dev/null 2>&1 && exec bash || exec sh"
         let folder = ShellQuote.quote(path.isEmpty ? "/" : path)
         let host = ShellQuote.quote("unix://" + socket)
-        let missing = ShellQuote.quote(String(localized: "Strata needs the docker command for this.", comment: "Shown in Terminal when docker isn't installed"))
+        let missing = ShellQuote.quote(String(localized: "Fileer needs the docker command for this.", comment: "Shown in Terminal when docker isn't installed"))
         return """
         #!/bin/sh
         # Written by Strata to open a shell in a container. Deletes itself; safe to remove.

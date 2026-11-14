@@ -44,7 +44,7 @@ class ThirdPartyNoticeTests(unittest.TestCase):
         self.assertIn((resource / "LICENSE").read_text(encoding="utf-8"), self.notices)
         self.assertIn('.copy("Mermaid")', self.manifest)
         script = (ROOT / "scripts/build.sh").read_text(encoding="utf-8")
-        self.assertIn('cp -R "$bins/Strata_StrataPreviews.bundle" "$app/Contents/Resources/Strata_StrataPreviews.bundle"', script)
+        self.assertIn('cp -R "$bins/Fileer_StrataPreviews.bundle" "$app/Contents/Resources/Fileer_StrataPreviews.bundle"', script)
 
     def test_every_library_in_the_diagram_inventory_has_its_full_license_text(self):
         resource = ROOT / "Sources/Strata/Previews/Mermaid"

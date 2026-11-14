@@ -13,7 +13,7 @@ package nonisolated enum RemoteError: Error, LocalizedError, Equatable {
 
     package var errorDescription: String? {
         switch self {
-        case .unknownServer: String(localized: "That server isn’t saved in Strata anymore.")
+        case .unknownServer: String(localized: "That server isn’t saved in Fileer anymore.")
         case .noSecret: String(localized: "There’s no secret key for this bucket in your keychain. Edit the server to add it.")
         case .exists(let name): String(localized: "“\(name)” is already there.")
         case .refused(let message): message
@@ -227,7 +227,7 @@ package nonisolated final class SFTPBackend: RemoteBackend {
                 try client.removeFolder(path)
                 continue
             }
-            guard depth < maxDepth else { throw RemoteError.refused(String(localized: "That folder goes too deep to delete from Strata.")) }
+            guard depth < maxDepth else { throw RemoteError.refused(String(localized: "That folder goes too deep to delete from Fileer.")) }
             stack.append((path, depth, true))
             for entry in try client.list(path) {
                 // A name that can't be one isn't followed anywhere; the folder then can't be emptied, and says so.
@@ -295,7 +295,7 @@ package nonisolated final class S3Backend: RemoteBackend {
     /// A key to change: never "", which would be the bucket itself.
     private static func changeable(_ path: String) throws -> String {
         let key = key(path)
-        guard !key.isEmpty else { throw RemoteError.refused(String(localized: "The bucket itself can’t be changed from Strata.")) }
+        guard !key.isEmpty else { throw RemoteError.refused(String(localized: "The bucket itself can’t be changed from Fileer.")) }
         return key
     }
 

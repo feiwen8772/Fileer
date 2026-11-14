@@ -113,8 +113,18 @@ let indexSources = [
 ]
 
 let package = Package(
-    name: "Strata",
+    name: "Fileer",
     platforms: [.macOS(.v26)],
+    products: [
+        .executable(name: "Fileer", targets: ["Strata"]),
+        .executable(name: "StrataCLI", targets: ["StrataCLI"]),
+        .executable(name: "StrataArchiveService", targets: ["StrataArchiveService"]),
+        .executable(name: "StrataArchiveWorker", targets: ["StrataArchiveWorker"]),
+        .executable(name: "StrataArchiveHarness", targets: ["StrataArchiveHarness"]),
+        .executable(name: "StrataTableWorker", targets: ["StrataTableWorker"]),
+        .executable(name: "StrataMediaWorker", targets: ["StrataMediaWorker"]),
+        .executable(name: "StrataResourceCheck", targets: ["StrataResourceCheck"]),
+    ],
     dependencies: [
         // Updates (Check for Updates…, automatic checks), pinned to a release and verified by its checksum.
         .package(url: "https://github.com/sparkle-project/Sparkle", exact: "2.10.0"),

@@ -105,7 +105,7 @@ extension SidebarViewController {
         let menu = NSButton(image: NSImage(systemSymbolName: "keyboard", accessibilityDescription: String(localized: "Keyboard Shortcuts")) ?? NSImage(), target: nil, action: #selector(AppDelegate.showShortcuts(_:)))
         menu.title = ""
         menu.imagePosition = .imageOnly
-        menu.toolTip = String(localized: "Every shortcut in Strata (⌘/)")
+        menu.toolTip = String(localized: "Every shortcut in Fileer (⌘/)")
         let add = NSButton(image: NSImage(systemSymbolName: "plus", accessibilityDescription: nil) ?? NSImage(),
                            target: self, action: #selector(newSidebarSpace(_:)))
         for button in [menu, add] {

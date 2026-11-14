@@ -35,7 +35,7 @@ private final class ResourceTestMarker: NSObject {}
         let owner = try #require(Bundle(url: tree.url("Products/Example.bundle")))
         #expect(throws: ResourceBundle.Missing.self) { try ResourceBundle.named("Example", in: host, linkedTo: owner) }
         #expect(throws: ResourceBundle.Missing.self) {
-            try ResourceBundle.named("Strata_StrataPreviews", in: host, linkedTo: Bundle(for: ResourceTestMarker.self))
+            try ResourceBundle.named("Fileer_StrataPreviews", in: host, linkedTo: Bundle(for: ResourceTestMarker.self))
         }
         #expect(tree.text("Products/Example.bundle/sample.txt") == "Products/Example.bundle/sample.txt")
     }
@@ -54,14 +54,14 @@ private final class ResourceTestMarker: NSObject {}
 
     @concurrent private static func probe(_ root: URL, products: URL, condition: String) async throws -> ProcessRunner.Result {
         let resources = root.appending(path: "Host.app/Contents/Resources")
-        for name in ["Strata_StrataPreviews", "Strata_StrataTheme"] {
+        for name in ["Fileer_StrataPreviews", "Fileer_StrataTheme"] {
             let bundle = try ResourceBundle.named(name, in: .main, linkedTo: Bundle(for: ResourceTestMarker.self))
-            if condition == "missing-previews" && name == "Strata_StrataPreviews" { continue }
-            if condition == "missing-themes" && name == "Strata_StrataTheme" { continue }
+            if condition == "missing-previews" && name == "Fileer_StrataPreviews" { continue }
+            if condition == "missing-themes" && name == "Fileer_StrataTheme" { continue }
             try FileManager.default.copyItem(at: bundle.bundleURL, to: resources.appending(path: name + ".bundle"))
         }
         if condition == "missing-script" {
-            let bundle = try #require(Bundle(url: resources.appending(path: "Strata_StrataPreviews.bundle")))
+            let bundle = try #require(Bundle(url: resources.appending(path: "Fileer_StrataPreviews.bundle")))
             try FileManager.default.removeItem(at: #require(bundle.url(forResource: "mermaid.min", withExtension: "js", subdirectory: "Mermaid")))
         }
         return try await ProcessRunner.run("/usr/bin/env", ["python3", checkout.appending(path: "scripts/check-app-resources.py").path,

@@ -25,7 +25,10 @@ class IconBuildTests(unittest.TestCase):
         self.resources = self.root / "Strata.app" / "Contents" / "Resources"
         self.resources.mkdir(parents=True)
         self.info = self.resources.parent / "Info.plist"
-        self.original_info = (ROOT / "Resources" / "Info.plist").read_bytes()
+        original = plistlib.loads((ROOT / "Resources" / "Info.plist").read_bytes())
+        original["CFBundleIconName"] = "AppIcon"
+        original["CFBundleIconFile"] = "AppIcon"
+        self.original_info = plistlib.dumps(original)
         self.info.write_bytes(self.original_info)
 
     @unittest.skipUnless(sys.platform == "darwin", "Xcode compiles the macOS app icon")
@@ -52,6 +55,22 @@ class IconBuildTests(unittest.TestCase):
         for size in [16, 32, 128, 256, 512]:
             for scale in ["", "@2x"]:
                 self.assertTrue((iconset / f"icon_{size}x{size}{scale}.png").is_file())
+
+    @unittest.skipUnless(sys.platform == "darwin", "macOS compiles the raster app icon")
+    def test_fileer_uses_supplied_raster_artwork_and_display_name(self):
+        self.info.write_bytes((ROOT / "Resources" / "Info.plist").read_bytes())
+        with contextlib.redirect_stdout(io.StringIO()):
+            build_icon.build(self.resources, self.info)
+        info = plistlib.loads(self.info.read_bytes())
+        self.assertEqual(info["CFBundleName"], "Fileer")
+        self.assertEqual(info["CFBundleDisplayName"], "Fileer")
+        self.assertNotIn("CFBundleIconName", info)
+        self.assertEqual(info["CFBundleIconFile"], "FileerIcon")
+        iconset = self.root / "fileer.iconset"
+        subprocess.run(["iconutil", "-c", "iconset", str(self.resources / "FileerIcon.icns"), "-o", str(iconset)], check=True)
+        for size in (16, 32, 128, 256, 512):
+            for suffix in ("", "@2x"):
+                self.assertTrue((iconset / f"icon_{size}x{size}{suffix}.png").is_file())
 
     def test_compiler_failure_stops_before_changing_bundle_resources_or_metadata(self):
         (self.resources / "Assets.car").write_bytes(b"previous catalog")

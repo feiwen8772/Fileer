@@ -75,7 +75,7 @@ nonisolated package struct ModelDocument: Sendable {
     }
 
     package static func bundledScript(_ name: String) throws -> String {
-        let bundle = try ResourceBundle.named("Strata_StrataPreviews", in: .main, linkedTo: Bundle(for: ModelPreviewView.self))
+        let bundle = try ResourceBundle.named("Fileer_StrataPreviews", in: .main, linkedTo: Bundle(for: ModelPreviewView.self))
         guard let url = bundle.url(forResource: name, withExtension: "js", subdirectory: "Models") else { throw PreviewError.unsupported }
         return try String(contentsOf: url, encoding: .utf8)
     }

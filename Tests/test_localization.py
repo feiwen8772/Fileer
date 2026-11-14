@@ -20,7 +20,7 @@ NEW_LABELS = [
     "Other options apply to all windows.", "Ascending", "Use as Defaults", "Date Added", "Duration", "Folder info", "Height", "Icon size", "Item count",
     "List columns", "Pictures and movies show their dimensions. Other files show their size.",
     "Show View Options…", "Show item info", "Total size", "View Options", "Width",
-    "/usr/local/bin/strata isn’t Strata’s command, so it was left as it is. Remove or rename it, then install again.",
+    "/usr/local/bin/strata isn’t Fileer’s command, so it was left as it is. Remove or rename it, then install again.",
     "Another “strata” is installed.",
 ]
 

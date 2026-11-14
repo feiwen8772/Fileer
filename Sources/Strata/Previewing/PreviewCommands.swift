@@ -6,7 +6,7 @@ enum PreviewAction: CaseIterable {
     var title: String {
         switch self {
         case .open: String(localized: "Open")
-        case .showInStrata: String(localized: "Show in Strata", comment: "Preview action: reveal the chosen item in its originating Strata pane")
+        case .showInStrata: String(localized: "Show in Fileer", comment: "Preview action: reveal the chosen item in its originating Strata pane")
         case .copy: String(localized: "Copy")
         case .copyPath: String(localized: "Copy Path")
         }

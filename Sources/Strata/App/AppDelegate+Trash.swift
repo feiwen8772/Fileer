@@ -6,8 +6,8 @@ extension AppDelegate {
         let window = NSApp.keyWindow
         guard Privacy.hasFullDiskAccess else {
             let alert = NSAlert()
-            alert.messageText = String(localized: "Strata needs Full Disk Access to empty the Trash.")
-            alert.informativeText = String(localized: "macOS protects the Trash. Turn on Strata in Privacy & Security ▸ Full Disk Access.")
+            alert.messageText = String(localized: "Fileer needs Full Disk Access to empty the Trash.")
+            alert.informativeText = String(localized: "macOS protects the Trash. Turn on Fileer in Privacy & Security ▸ Full Disk Access.")
             alert.addButton(withTitle: String(localized: "Open Privacy Settings"))
             alert.addButton(withTitle: String(localized: "Cancel"))
             FileAlerts.present(alert, in: window) { response in

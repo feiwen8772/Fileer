@@ -116,7 +116,7 @@ enum ArchiveOpening {
             ? String(localized: "“\(archive.lastPathComponent)” holds \(size).", comment: "An archive, then its unpacked size (“5 GB”)")
             : String(localized: "“\(archive.lastPathComponent)” holds at least \(size).",
                      comment: "An archive, then the least its unpacked size can be (“5 GB”): counting it didn’t finish")
-        alert.informativeText = String(localized: "Opening it as a folder unpacks all of it into Strata’s caches first. Extract puts it next to the archive instead.")
+        alert.informativeText = String(localized: "Opening it as a folder unpacks all of it into Fileer’s caches first. Extract puts it next to the archive instead.")
         alert.addButton(withTitle: String(localized: "Open", comment: "Alert button: open the archive as a folder"))
         alert.addButton(withTitle: String(localized: "Extract", comment: "Alert button: unpack the archive next to it"))
         alert.addButton(withTitle: String(localized: "Cancel"))

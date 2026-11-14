@@ -33,7 +33,7 @@ struct LanguageSection: View {
                     Text(Self.name(code)).tag(code)
                 }
             }
-            Text("Translations are made by people who use Strata. Yours is welcome: see Localization/README.md in the source.")
+            Text("Translations are made by people who use Fileer. Yours is welcome: see Localization/README.md in the source.")
                 .font(.callout)
                 .foregroundStyle(.secondary)
         }
@@ -44,8 +44,8 @@ struct LanguageSection: View {
         chosen = code
         Prefs.shared.language = code
         let alert = NSAlert()
-        alert.messageText = String(localized: "Restart Strata to switch languages?")
-        alert.informativeText = String(localized: "The new language is used when Strata starts again.")
+        alert.messageText = String(localized: "Restart Fileer to switch languages?")
+        alert.informativeText = String(localized: "The new language is used when Fileer starts again.")
         alert.addButton(withTitle: String(localized: "Restart Now"))
         alert.addButton(withTitle: String(localized: "Later", comment: "Alert button: restart Strata later"))
         guard alert.runModal() == .alertFirstButtonReturn else { return }

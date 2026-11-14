@@ -62,7 +62,7 @@ final class ShortcutsWindowController: NSWindowController, NSSearchFieldDelegate
             Shortcut(keys: ["⌘", "Z"], action: "Undo"),
             Shortcut(keys: ["⇧", "⌘", "Z"], action: "Redo"),
             Shortcut(keys: ["⌥", "⌘", "Z"], action: "History: undo past operations, even after quitting"),
-            Shortcut(keys: ["⌥", "⌘", "A"], action: "Ask Strata: describe a bulk change"),
+            Shortcut(keys: ["⌥", "⌘", "A"], action: "Ask Fileer: describe a bulk change"),
             Shortcut(keys: ["⌃", "⌘", "T"], action: "Open in Terminal"),
             Shortcut(keys: ["⌘", "E"], action: "Eject"),
             Shortcut(keys: ["⌥", "drag"], action: "Copy instead of move"),

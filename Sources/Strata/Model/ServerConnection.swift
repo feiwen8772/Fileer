@@ -27,7 +27,7 @@ nonisolated package enum ServerConnection {
             return .failure(Problem(message: String(localized: "That isn’t a server address. Try smb://server/share.")))
         }
         guard schemes.contains(scheme) else {
-            return .failure(Problem(message: String(localized: "Strata connects to SMB, AFP, NFS and WebDAV (https://) servers, not “\(scheme)://”.")))
+            return .failure(Problem(message: String(localized: "Fileer connects to SMB, AFP, NFS and WebDAV (https://) servers, not “\(scheme)://”.")))
         }
         guard let host = components.host, !host.isEmpty else {
             return .failure(Problem(message: String(localized: "The address needs a server name, like smb://server/share.")))

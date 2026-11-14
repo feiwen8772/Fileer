@@ -1,6 +1,6 @@
 import AppKit
 
-/// "Ask Strata…": describe a change for the selected files, review the plan, apply it as one undoable step.
+/// "Ask Fileer…": describe a change for the selected files, review the plan, apply it as one undoable step.
 ///
 /// The sheet goes through: prompt (instruction field + suggestions) → planning (spinner) → review (checkbox table of
 /// before → after, skipped steps with reasons, summary line) → applying. Apply runs `PlanExecutor` with the window's undo manager.
@@ -121,7 +121,7 @@ final class PlanSheetController: NSViewController {
     /// Strata's icon, the title and the selection, and the badge saying how the plan was made.
     private func makeHeader() -> NSStackView {
         let icon = AppIconBadge()
-        let title = NSTextField(labelWithString: String(localized: "Ask Strata", comment: "Title of the sheet where you describe a change for the selected files"))
+        let title = NSTextField(labelWithString: String(localized: "Ask Fileer", comment: "Title of the sheet where you describe a change for the selected files"))
         title.font = .systemFont(ofSize: 15, weight: .semibold)
         subtitle.font = .systemFont(ofSize: 12)
         subtitle.textColor = .secondaryLabelColor
@@ -297,9 +297,9 @@ final class PlanSheetController: NSViewController {
         rows = []
         badge.set(nil)
         summary.stringValue = AIModel.isAvailable ? String(localized: "Plans are made on this Mac and shown before anything changes.")
-            : AIModel.isSupported ? String(localized: "\(AIModel.shortStatus) — Strata’s built-in rules handle common requests.",
+            : AIModel.isSupported ? String(localized: "\(AIModel.shortStatus) — Fileer’s built-in rules handle common requests.",
                                            comment: "Starts with why Apple Intelligence can’t be used, like “Apple Intelligence is off”")
-            : String(localized: "Strata’s built-in rules make the plan, and it’s shown before anything changes.")
+            : String(localized: "Fileer’s built-in rules make the plan, and it’s shown before anything changes.")
         showSuggestions(PlanGenerator.suggestions(for: items), title: items.isEmpty ? nil : String(localized: "Try one of these"))
         applyButton.title = String(localized: "Apply", comment: "Button: apply the plan’s changes")
         applyButton.isEnabled = false
@@ -346,7 +346,7 @@ final class PlanSheetController: NSViewController {
         }
         if !suggestions.isEmpty {
             if let last = overlay.arrangedSubviews.last { overlay.setCustomSpacing(18, after: last) }
-            appendSuggestions(suggestions, title: String(localized: "Strata can do these without it", comment: "Heading of requests Strata can plan without Apple Intelligence"))
+            appendSuggestions(suggestions, title: String(localized: "Fileer can do these without it", comment: "Heading of requests Strata can plan without Apple Intelligence"))
         }
         summary.stringValue = ""
         applyButton.title = String(localized: "Apply", comment: "Button: apply the plan’s changes")

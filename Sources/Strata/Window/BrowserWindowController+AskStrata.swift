@@ -1,7 +1,7 @@
 import AppKit
 
 extension BrowserWindowController {
-    /// "Ask Strata…": plan-then-execute on the selection (or everything in the folder when nothing is selected).
+    /// "Ask Fileer…": plan-then-execute on the selection (or everything in the folder when nothing is selected).
     @objc func askStrata(_ sender: Any?) {
         presentAskStrata(instruction: nil)
     }

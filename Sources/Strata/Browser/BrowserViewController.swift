@@ -600,8 +600,8 @@ final class BrowserViewController: NSViewController {
                 } else {
                     emptyState.show(
                         symbol: "lock",
-                        title: String(localized: "Strata can’t read this folder"),
-                        message: String(localized: "macOS protects this location. Give Strata Full Disk Access to browse it."),
+                        title: String(localized: "Fileer can’t read this folder"),
+                        message: String(localized: "macOS protects this location. Give Fileer Full Disk Access to browse it."),
                         button: (String(localized: "Open Privacy Settings"), { NSWorkspace.shared.open(Privacy.settingsURL) }))
                 }
             } else if error.code == NSFileReadNoSuchFileError {

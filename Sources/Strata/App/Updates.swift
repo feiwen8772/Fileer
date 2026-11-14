@@ -37,11 +37,11 @@ struct UpdatesSection: View {
             if let updater = Updates.shared.updater {
                 Toggle(isOn: Binding(get: { checks }, set: { checks = $0; updater.automaticallyChecksForUpdates = $0 })) {
                     Text("Check for updates automatically")
-                    Text("Once a day, Strata asks GitHub whether there’s a newer version.")
+                    Text("Once a day, Fileer asks GitHub whether there’s a newer version.")
                 }
                 Toggle(isOn: Binding(get: { downloads }, set: { downloads = $0; updater.automaticallyDownloadsUpdates = $0 })) {
                     Text("Download and install updates automatically")
-                    Text("Updates install when Strata quits.")
+                    Text("Updates install when Fileer quits.")
                 }
                 .disabled(!checks)
                 LabeledContent(String(localized: "Version \(Bundle.main.shortVersion)", comment: "Settings: the app's version")) {
@@ -49,7 +49,7 @@ struct UpdatesSection: View {
                         .disabled(!Updates.shared.canCheck)
                 }
             } else {
-                Text("Updates are checked in copies of Strata installed from a release.")
+                Text("Updates are checked in copies of Fileer installed from a release.")
                     .foregroundStyle(.secondary)
             }
         }

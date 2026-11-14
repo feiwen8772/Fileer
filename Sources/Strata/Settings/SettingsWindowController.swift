@@ -137,7 +137,7 @@ private struct GeneralSettings: View {
                 PrefToggle(title: "Address bar in each pane",
                            caption: "In Dual Pane, each side has its own path bar instead of just the folder name.",
                            get: { Prefs.shared.dualPaneAddressBars }, set: { Prefs.shared.dualPaneAddressBars = $0 }).settingAnchor(.addressBars)
-                PrefToggle(title: "Reopen windows from last time", caption: "Windows, tabs and panes come back when Strata starts.",
+                PrefToggle(title: "Reopen windows from last time", caption: "Windows, tabs and panes come back when Fileer starts.",
                            get: { Prefs.shared.reopenWindows }, set: { Prefs.shared.reopenWindows = $0 }).settingAnchor(.reopenWindows)
                 PrefToggle(title: "Open archives like folders",
                            caption: "Opening a zip (or tar, 7z, rar…) shows what's inside; copy things out from there. Extract unpacks it.",
@@ -159,13 +159,13 @@ private struct GeneralSettings: View {
             }
             Section("Dock") {
                 PrefToggle(title: "Search box in the Dock",
-                           caption: "A search box next to Strata in the Dock finds apps, files and folders as you type. Strata needs Accessibility access to place it, and keeps a few empty tiles in the Dock for it.",
+                           caption: "A search box next to Fileer in the Dock finds apps, files and folders as you type. Fileer needs Accessibility access to place it, and keeps a few empty tiles in the Dock for it.",
                            get: { Prefs.shared.dockSearch }, set: { Prefs.shared.dockSearch = $0; DockSearch.shared.apply() }).settingAnchor(.dockSearch)
             }
             Section {
                 Toggle(isOn: Binding(get: { isFileViewer }, set: { isFileViewer = $0; FileViewer.setStrata($0) })) {
-                    Text("Open “Reveal in Finder” in Strata")
-                    Text("Apps that show files in Finder (Show in Finder, Reveal) open Strata instead. Applies to apps launched after the change.")
+                    Text("Open “Reveal in Finder” in Fileer")
+                    Text("Apps that show files in Finder (Show in Finder, Reveal) open Fileer instead. Applies to apps launched after the change.")
                 }.settingAnchor(.defaultFileBrowser)
             } header: {
                 Text("Default File Browser")
@@ -177,7 +177,7 @@ private struct GeneralSettings: View {
                 } label: {
                     Text(verbatim: "strata")
                 }
-                Text("Then `strata .` opens the current folder in Strata, and `strata -s \"ext:pdf invoice\"` searches.")
+                Text("Then `strata .` opens the current folder in Fileer, and `strata -s \"ext:pdf invoice\"` searches.")
                     .font(.callout)
                     .foregroundStyle(.secondary)
             }
@@ -239,7 +239,7 @@ private struct IndexSettings: View {
                 }
                 .settingAnchor(.fullDiskAccess)
                 if !hasAccess {
-                    Text("Without it, Desktop, Documents and Downloads are indexed only after you open them in Strata, and other apps’ data is skipped.")
+                    Text("Without it, Desktop, Documents and Downloads are indexed only after you open them in Fileer, and other apps’ data is skipped.")
                         .font(.callout)
                         .foregroundStyle(.secondary)
                 }
@@ -316,7 +316,7 @@ enum CommandLineTool {
             alert.messageText = String(localized: "The strata command is already installed.")
         } else if !mayReplace(link) {
             alert.messageText = String(localized: "Another “strata” is installed.")
-            alert.informativeText = String(localized: "/usr/local/bin/strata isn’t Strata’s command, so it was left as it is. Remove or rename it, then install again.")
+            alert.informativeText = String(localized: "/usr/local/bin/strata isn’t Fileer’s command, so it was left as it is. Remove or rename it, then install again.")
         } else if FileManager.default.isWritableFile(atPath: "/usr/local/bin") {
             _ = unlink(link)
             do {

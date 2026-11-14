@@ -29,7 +29,7 @@ private final class MathBundleMarker {}
     }
 
     @concurrent package static func script() async throws -> String {
-        let bundle = try ResourceBundle.named("Strata_StrataPreviews", in: .main, linkedTo: Bundle(for: MathBundleMarker.self))
+        let bundle = try ResourceBundle.named("Fileer_StrataPreviews", in: .main, linkedTo: Bundle(for: MathBundleMarker.self))
         guard let url = bundle.url(forResource: "katex.min", withExtension: "js", subdirectory: "Math") else {
             throw PreviewError.unsupported
         }

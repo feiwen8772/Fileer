@@ -167,7 +167,7 @@ import AppKit
             // A link or saved search pointing into a guarded folder you haven't opened: macOS would ask.
             let name = Places.displayName(scope, copies: services.copies, names: services.folderNames)
             p.browser.showMessage(symbol: "lock", title: String(localized: "Open “\(name)” to search it"),
-                                  message: String(localized: "macOS asks before apps read this folder. Open it in Strata once, then search it."))
+                                  message: String(localized: "macOS asks before apps read this folder. Open it in Fileer once, then search it."))
             show(summary: "")
             return
         }
@@ -347,7 +347,7 @@ import AppKit
             } else if shown < 0 {
                 shown = 0
                 p.browser.showMessage(symbol: "magnifyingglass", title: String(localized: "Searching…"),
-                                      message: String(localized: "“\(name)” isn’t in the index, so Strata is reading it directly."))
+                                      message: String(localized: "“\(name)” isn’t in the index, so Fileer is reading it directly."))
             }
             if finished {
                 var parts = [found.total == 0 ? String(localized: "No results in “\(name)”")

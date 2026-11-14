@@ -14,7 +14,7 @@ private final class PreviewBundleMarker {}
     }
 
     @concurrent package static func script() async throws -> String {
-        let bundle = try ResourceBundle.named("Strata_StrataPreviews", in: .main, linkedTo: Bundle(for: PreviewBundleMarker.self))
+        let bundle = try ResourceBundle.named("Fileer_StrataPreviews", in: .main, linkedTo: Bundle(for: PreviewBundleMarker.self))
         guard let url = bundle.url(forResource: "mermaid.min", withExtension: "js", subdirectory: "Mermaid") else {
             throw PreviewError.unsupported
         }

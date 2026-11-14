@@ -153,7 +153,7 @@ nonisolated package enum ThemeCatalog {
     }()
 
     package static func loadBundled() throws -> [ColorTheme] {
-        let bundle = try ResourceBundle.named("Strata_StrataTheme", in: .main, linkedTo: Bundle(for: ThemeBundleMarker.self))
+        let bundle = try ResourceBundle.named("Fileer_StrataTheme", in: .main, linkedTo: Bundle(for: ThemeBundleMarker.self))
         guard let folder = bundle.url(forResource: "Themes", withExtension: nil) else {
             throw Invalid("Missing bundled theme folder")
         }

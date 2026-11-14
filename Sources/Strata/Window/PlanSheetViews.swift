@@ -247,7 +247,7 @@ final class BadgeView: NSView {
                            range: NSRange(location: 0, length: text.length))
         label.attributedStringValue = text
         toolTip = source == .model ? String(localized: "Planned on this Mac with Apple Intelligence")
-            : String(localized: "Planned by Strata’s built-in rules — no AI involved")
+            : String(localized: "Planned by Fileer’s built-in rules — no AI involved")
     }
 
     override var wantsUpdateLayer: Bool { true }

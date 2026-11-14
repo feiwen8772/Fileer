@@ -223,7 +223,7 @@ nonisolated enum AppUpdateCheck {
         case .sparkle(let feed):
             return await checkFeed(feed, app: app)
         case .refusedFeed:
-            return .failed(String(localized: "Its update feed isn’t a secure web address, so Strata doesn’t read it.",
+            return .failed(String(localized: "Its update feed isn’t a secure web address, so Fileer doesn’t read it.",
                                   comment: "Checking an app for updates: why it wasn't checked"))
         case .appStore(let id):
             guard let id, let listing = store.listings[id] else {
@@ -239,7 +239,7 @@ nonisolated enum AppUpdateCheck {
         case .itself(let hasSparkle):
             return .itself(hasSparkle: hasSparkle)
         case .unreadable:
-            return .failed(String(localized: "Strata can’t read this app’s information.", comment: "Checking an app for updates: its Info.plist is missing or unreadable"))
+            return .failed(String(localized: "Fileer can’t read this app’s information.", comment: "Checking an app for updates: its Info.plist is missing or unreadable"))
         }
     }
 
@@ -389,7 +389,7 @@ nonisolated enum AppUpdateCheck {
         case FetchError.status(let code):
             return String(localized: "Its update server answered with an error (\(code)).", comment: "Checking an app for updates; the placeholder is an HTTP status code")
         case FetchError.refused:
-            return String(localized: "Its update feed isn’t a secure web address, so Strata doesn’t read it.",
+            return String(localized: "Its update feed isn’t a secure web address, so Fileer doesn’t read it.",
                           comment: "Checking an app for updates: why it wasn't checked")
         case FetchError.tooLarge:
             return String(localized: "Its update feed is too large to be one.", comment: "Checking an app for updates: the feed was suspiciously big")

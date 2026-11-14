@@ -37,9 +37,9 @@ package nonisolated enum S3Error: Error, Equatable, LocalizedError {
             default: message.isEmpty ? String(localized: "The storage service answered \(status) (\(code)).", comment: "An HTTP status and an error code")
                 : String(message.prefix(300))
             }
-        case .badResponse: String(localized: "The storage service sent something Strata doesn’t understand.")
+        case .badResponse: String(localized: "The storage service sent something Fileer doesn’t understand.")
         case .tooLarge: String(localized: "Files over 5 GB can’t be uploaded to a bucket yet.")
-        case .insecure: String(localized: "Strata only sends credentials over a secure (https) connection.")
+        case .insecure: String(localized: "Fileer only sends credentials over a secure (https) connection.")
         case .changed: String(localized: "It changed in the bucket while it was being read. Reload the folder and try again.")
         }
     }

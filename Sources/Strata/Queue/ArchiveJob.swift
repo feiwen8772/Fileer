@@ -175,7 +175,7 @@ package final class ArchiveJob {
 
     private static func requireArchive(_ archive: URL) throws {
         guard ArchiveKind(fileName: archive.lastPathComponent) != nil else {
-            throw Archiver.Failure(message: String(localized: "“\(archive.lastPathComponent)” isn’t an archive Strata can open."))
+            throw Archiver.Failure(message: String(localized: "“\(archive.lastPathComponent)” isn’t an archive Fileer can open."))
         }
     }
 

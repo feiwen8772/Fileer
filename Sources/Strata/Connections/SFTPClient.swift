@@ -54,10 +54,10 @@ package nonisolated enum SFTPError: Error, Equatable, LocalizedError {
         case .disconnected(let detail):
             detail.isEmpty ? String(localized: "The connection to the server ended.")
                 : String(localized: "The connection to the server ended: \(detail)", comment: "What ssh said follows")
-        case .malformed: String(localized: "The server sent something Strata doesn’t understand.")
+        case .malformed: String(localized: "The server sent something Fileer doesn’t understand.")
         case .stopped: String(localized: "Stopped.")
         case .tooLarge: String(localized: "It changed on the server while it was being read. Reload the folder and try again.")
-        case .stoppedAnswering: String(localized: "The server stopped answering, so Strata disconnected. Reload the folder to connect again.")
+        case .stoppedAnswering: String(localized: "The server stopped answering, so Fileer disconnected. Reload the folder to connect again.")
         }
     }
 }

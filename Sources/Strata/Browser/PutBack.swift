@@ -61,10 +61,10 @@ enum PutBack {
         let alert = NSAlert()
         // Finder notes where things came from only a while later, so anything it trashed moments ago isn't known yet.
         if items.count == 1 {
-            alert.messageText = String(localized: "Strata doesn’t know where “\(first.lastPathComponent)” came from.")
+            alert.messageText = String(localized: "Fileer doesn’t know where “\(first.lastPathComponent)” came from.")
             alert.informativeText = String(localized: "Where it was isn’t recorded. If Finder moved it to the Trash moments ago, use Put Back in Finder, or try again in a few minutes. You can also drag it where you want.")
         } else {
-            alert.messageText = String(localized: "Strata doesn’t know where \(items.count) of these items came from.", comment: "plural")
+            alert.messageText = String(localized: "Fileer doesn’t know where \(items.count) of these items came from.", comment: "plural")
             alert.informativeText = String(localized: "Where they were isn’t recorded. If Finder moved them to the Trash moments ago, use Put Back in Finder, or try again in a few minutes. You can also drag them where you want.")
         }
         FileAlerts.present(alert, in: window) { _ in }

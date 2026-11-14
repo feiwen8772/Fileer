@@ -592,8 +592,8 @@
   },
   {
     "file": "Strata/Remote/RemoteSession.swift",
-    "find": "        guard !key.isEmpty else { throw RemoteError.refused(String(localized: \"The bucket itself can’t be changed from Strata.\")) }",
-    "replace": "        guard true else { throw RemoteError.refused(String(localized: \"The bucket itself can’t be changed from Strata.\")) }",
+    "find": "        guard !key.isEmpty else { throw RemoteError.refused(String(localized: \"The bucket itself can’t be changed from Fileer.\")) }",
+    "replace": "        guard true else { throw RemoteError.refused(String(localized: \"The bucket itself can’t be changed from Fileer.\")) }",
     "rule": "The bucket's top is deleted or written to",
     "tests": "S3Tests/theBucketItself|S3Tests/uploadsAndFolders"
   },

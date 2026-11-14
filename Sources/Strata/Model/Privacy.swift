@@ -99,17 +99,17 @@ package final class WelcomeSheetController: NSWindowController {
         let caption = NSTextField(labelWithString: String(localized: "Drag me into the list", comment: "Welcome sheet: under the app icon"))
         caption.font = .systemFont(ofSize: 11, weight: .medium)
         caption.textColor = .tertiaryLabelColor
-        let title = NSTextField(labelWithString: String(localized: "Welcome to Strata"))
+        let title = NSTextField(labelWithString: String(localized: "Welcome to Fileer"))
         title.font = .systemFont(ofSize: 20, weight: .bold)
         let body = NSTextField(wrappingLabelWithString:
-            String(localized: "Give Strata Full Disk Access to see folder sizes everywhere and browse protected places like Library, Mail and other apps’ data, with one switch instead of a permission prompt per folder."))
+            String(localized: "Give Fileer Full Disk Access to see folder sizes everywhere and browse protected places like Library, Mail and other apps’ data, with one switch instead of a permission prompt per folder."))
         body.font = .systemFont(ofSize: 13)
         body.textColor = .secondaryLabelColor
         body.alignment = .center
         body.preferredMaxLayoutWidth = 380
         status.font = .systemFont(ofSize: 12, weight: .medium)
         status.textColor = .secondaryLabelColor
-        status.stringValue = String(localized: "Open Privacy Settings, drag the icon above into the list (or click +) and switch Strata on.")
+        status.stringValue = String(localized: "Open Privacy Settings, drag the icon above into the list (or click +) and switch Fileer on.")
 
         primary.bezelStyle = .push
         primary.controlSize = .large

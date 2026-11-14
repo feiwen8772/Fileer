@@ -52,7 +52,7 @@ jobs:
         run: python3 -m unittest discover -s Tests -p 'test_*.py'
 
       - name: Build
-        run: swift build --product Strata
+        run: swift build --product Fileer
 
       - name: Test
         run: python3 scripts/run-test-check.py --output-directory "$RUNNER_TEMP/strata-test-diagnostics/normal" -- swift test --no-parallel
@@ -83,7 +83,7 @@ jobs:
           swift --version
 
       - name: Build optimized app
-        run: swift build -c release --product Strata --disable-automatic-resolution --jobs 4
+        run: swift build -c release --product Fileer --disable-automatic-resolution --jobs 4
 
       - name: Test optimized app
         run: python3 scripts/run-test-check.py --output-directory "$RUNNER_TEMP/strata-test-diagnostics/release" -- swift test -c release --no-parallel --disable-automatic-resolution --jobs 4

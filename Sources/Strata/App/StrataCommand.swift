@@ -64,7 +64,7 @@ struct StrataCommand {
     static let newFile = Self(String(localized: "New File"), #selector(BrowserViewController.newFile(_:)), .browser, "n", [.command, .option], symbol: "doc.badge.plus")
     static let openSelection = Self(String(localized: "Open"), #selector(BrowserViewController.openSelection(_:)), .browser, "o", symbol: "arrow.up.forward.app")
     static let openInTerminal = Self(String(localized: "Open in Terminal"), #selector(BrowserViewController.openInTerminal(_:)), .browser, "t", [.command, .control], symbol: "terminal")
-    static let askStrata = Self(String(localized: "Ask Strata…"), #selector(BrowserWindowController.askStrata(_:)), .window, "a", [.command, .option], symbol: "sparkles")
+    static let askStrata = Self(String(localized: "Ask Fileer…"), #selector(BrowserWindowController.askStrata(_:)), .window, "a", [.command, .option], symbol: "sparkles")
     static let showInFinder = Self(String(localized: "Show in Finder"), #selector(BrowserViewController.showInFinder(_:)), .browser, symbol: "macwindow")
     static let addToSidebar = Self(String(localized: "Add to Sidebar"), #selector(BrowserViewController.addToSidebar(_:)), .browser, symbol: "sidebar.left")
     static let toggleQuickLook = Self(String(localized: "Quick Look"), #selector(BrowserViewController.toggleQuickLook(_:)), .browser, "y", symbol: "eye")

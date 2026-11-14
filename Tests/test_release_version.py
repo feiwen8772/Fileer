@@ -63,7 +63,7 @@ class ReleaseVersionTests(unittest.TestCase):
         result, output, environment = self.plan('v0.8.6')
         self.assertEqual(result.returncode, 0, result.stderr)
         self.assertEqual(output, {'tag': 'v0.8.6', 'source_sha': self.source_sha, 'version': '0.8.6',
-                                  'prerelease': 'false', 'artifact': 'Strata-0.8.6'})
+                                  'prerelease': 'false', 'artifact': 'Fileer-0.8.6'})
         self.assertEqual(environment, {'STRATA_VERSION': '0.8.6', 'STRATA_BUILD_NUMBER': '42'})
 
     def test_prereleases_keep_the_tag_but_stamp_a_numeric_bundle_version(self):
@@ -71,7 +71,7 @@ class ReleaseVersionTests(unittest.TestCase):
         self.assertEqual(result.returncode, 0, result.stderr)
         self.assertEqual(output['tag'], 'v0.8.6-beta.1')
         self.assertEqual(output['version'], '0.8.6-beta.1')
-        self.assertEqual(output['artifact'], 'Strata-0.8.6-beta.1')
+        self.assertEqual(output['artifact'], 'Fileer-0.8.6-beta.1')
         self.assertEqual(output['prerelease'], 'true')
         self.assertEqual(environment['STRATA_VERSION'], '0.8.6')
 
@@ -79,7 +79,7 @@ class ReleaseVersionTests(unittest.TestCase):
         result, output, environment = self.plan('')
         self.assertEqual(result.returncode, 0, result.stderr)
         self.assertEqual(output, {'tag': '', 'source_sha': self.source_sha, 'version': '1.2.3',
-                                  'prerelease': 'false', 'artifact': 'Strata-1.2.3-build42'})
+                                  'prerelease': 'false', 'artifact': 'Fileer-1.2.3-build42'})
         self.assertEqual(environment['STRATA_VERSION'], '1.2.3')
 
     def test_invalid_tags_cannot_write_release_outputs_or_execute_input(self):

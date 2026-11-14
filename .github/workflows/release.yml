@@ -1,11 +1,11 @@
 name: Release
 run-name: Release ${{ inputs.release_tag || github.ref_name }}
 
-# Builds Strata.app on a Mac, signs it with the Developer ID certificate, notarizes and staples it, and wraps it in a
+# Builds Fileer.app on a Mac, signs it with the Developer ID certificate, notarizes and staples it, and wraps it in a
 # signed, notarized disk image.
 #
 #   git tag v0.2.0 && git push origin v0.2.0
-#       Publishes a GitHub Release with Strata.dmg, Strata.zip and SHA256SUMS.txt. The website's Download button
+#       Publishes a GitHub Release with Fileer.dmg, Fileer.zip and SHA256SUMS.txt. The website's Download button
 #       always points at the latest one. A tag with a suffix (v0.2.0-beta.1) is published as a pre-release.
 #   Actions tab -> Release -> Run workflow
 #       Builds the same files as a workflow artifact. Supply release_tag to retry publishing an existing tag.
@@ -20,7 +20,8 @@ run-name: Release ${{ inputs.release_tag || github.ref_name }}
 #   SPARKLE_ED_PRIVATE_KEY  the EdDSA key that signs updates (scripts: Sparkle's generate_keys -x); its public half
 #                           is SUPublicEDKey in Resources/Info.plist. Without it a tag builds no appcast.xml.
 # Without them an artifact-only run builds ad-hoc signed, for testing only. Publishing requires the signing secrets:
-# Gatekeeper refuses an unsigned app on any other Mac.
+# Fileer permits explicitly authorized unnotarized test releases via FILEER_ALLOW_ADHOC_RELEASE=true.
+# The full test, localization and update-signature gates still apply.
 on:
   push:
     tags: ["v*"]
@@ -73,9 +74,9 @@ jobs:
           ref: ${{ env.RELEASE_TAG && format('refs/tags/{0}', env.RELEASE_TAG) || github.sha }}
 
       - name: Refuse to release an unsigned build
-        if: env.RELEASE_TAG != '' && env.HAS_APPLE_SIGNING != 'true'
+        if: env.RELEASE_TAG != '' && env.HAS_APPLE_SIGNING != 'true' && (vars.FILEER_ALLOW_ADHOC_RELEASE != 'true' || env.RELEASE_TAG != 'v0.1')
         run: |
-          echo "::error::The signing secrets are not set (see the top of release.yml). A release has to be signed and notarized."
+          echo "::error::The signing secrets are not set (see the top of release.yml). A release requires signing, or an explicitly authorized Fileer v0.1 test release."
           exit 1
 
       - name: Select Xcode ${{ env.XCODE_VERSION }}
@@ -132,7 +133,7 @@ jobs:
             echo "::error::'$VERSION' is not a version like 1.2.3 or 1.2.3-beta.1"; exit 1; }
           # Info.plist takes the numeric part; the suffix only marks a pre-release.
           if [[ "$VERSION" == *-* ]]; then PRERELEASE=true; else PRERELEASE=false; fi
-          if [ -n "$RELEASE_TAG" ]; then ARTIFACT="Strata-$VERSION"; else ARTIFACT="Strata-$VERSION-build$RUN_NUMBER"; fi
+          if [ -n "$RELEASE_TAG" ]; then ARTIFACT="Fileer-$VERSION"; else ARTIFACT="Fileer-$VERSION-build$RUN_NUMBER"; fi
           echo "STRATA_VERSION=${VERSION%%-*}" >> "$GITHUB_ENV"
           echo "STRATA_BUILD_NUMBER=$RUN_NUMBER" >> "$GITHUB_ENV"
           {
@@ -142,7 +143,7 @@ jobs:
             echo "prerelease=$PRERELEASE"
             echo "artifact=$ARTIFACT"
           } >> "$GITHUB_OUTPUT"
-          echo "building Strata $VERSION (build $RUN_NUMBER)"
+          echo "building Fileer $VERSION (build $RUN_NUMBER)"
 
       - name: Import the Developer ID certificate into a temporary keychain
         if: env.HAS_APPLE_SIGNING == 'true'
@@ -167,7 +168,7 @@ jobs:
           echo "SIGN_IDENTITY=$IDENTITY" >> "$GITHUB_ENV"
           echo "SIGN_KEYCHAIN=$KC" >> "$GITHUB_ENV"
 
-      - name: Build Strata.app
+      - name: Build Fileer.app
         run: |
           set -euo pipefail
           STRATA_SIGNING_IDENTITY="${SIGN_IDENTITY:-}" STRATA_KEYCHAIN="${SIGN_KEYCHAIN:-}" STRATA_TIMESTAMP=1 \
@@ -176,12 +177,12 @@ jobs:
       - name: Check the app
         run: |
           set -euo pipefail
-          APP=build/Strata.app
+          APP=build/Fileer.app
           codesign --verify --strict --deep --verbose=2 "$APP"
           codesign -dvv "$APP" 2>&1 | grep -E "^(Authority|TeamIdentifier|Timestamp|Runtime Version)" || true
           echo "version $(/usr/libexec/PlistBuddy -c 'Print :CFBundleShortVersionString' "$APP/Contents/Info.plist")" \
                "build $(/usr/libexec/PlistBuddy -c 'Print :CFBundleVersion' "$APP/Contents/Info.plist")"
-          echo "architectures: $(lipo -archs "$APP/Contents/MacOS/Strata")"
+          echo "architectures: $(lipo -archs "$APP/Contents/MacOS/Fileer")"
           # The command-line tool runs without starting the app: a cheap check that the binaries load.
           "$APP/Contents/Helpers/strata" --help >/dev/null
 
@@ -193,7 +194,7 @@ jobs:
           TEAM_ID: ${{ secrets.MACOS_TEAM_ID }}
         run: |
           set -euo pipefail
-          APP=build/Strata.app
+          APP=build/Fileer.app
           mkdir -p dist
           signed=false
           if [ "$HAS_APPLE_SIGNING" = true ]; then signed=true; fi
@@ -224,31 +225,31 @@ jobs:
             xcrun stapler validate "$APP"
             spctl --assess --type execute -vv "$APP"
           else
-            echo "::warning::Signing secrets not set: this build is ad-hoc signed and Gatekeeper will refuse it on other Macs. Don't share it."
+            echo "::warning::Signing secrets not set: this build is ad-hoc signed and this is an explicitly authorized, unnotarized Fileer test release."
           fi
 
           # 2. The disk image: the app next to a link to Applications.
           stage="$RUNNER_TEMP/dmg"
           rm -rf "$stage" && mkdir -p "$stage"
-          ditto "$APP" "$stage/Strata.app"
+          ditto "$APP" "$stage/Fileer.app"
           ln -s /Applications "$stage/Applications"
-          hdiutil create -volname Strata -srcfolder "$stage" -fs HFS+ -format UDZO -ov dist/Strata.dmg
+          hdiutil create -volname Fileer -srcfolder "$stage" -fs HFS+ -format UDZO -ov dist/Fileer.dmg
           if [ "$signed" = true ]; then
-            codesign --force --timestamp --keychain "$SIGN_KEYCHAIN" --sign "$SIGN_IDENTITY" dist/Strata.dmg
-            notarize dist/Strata.dmg
-            xcrun stapler staple dist/Strata.dmg
-            xcrun stapler validate dist/Strata.dmg
-            spctl --assess --type open --context context:primary-signature -vv dist/Strata.dmg
+            codesign --force --timestamp --keychain "$SIGN_KEYCHAIN" --sign "$SIGN_IDENTITY" dist/Fileer.dmg
+            notarize dist/Fileer.dmg
+            xcrun stapler staple dist/Fileer.dmg
+            xcrun stapler validate dist/Fileer.dmg
+            spctl --assess --type open --context context:primary-signature -vv dist/Fileer.dmg
           fi
 
           # 3. The stapled app as a zip, for people who'd rather not mount an image.
-          ditto -c -k --keepParent "$APP" dist/Strata.zip
-          (cd dist && shasum -a 256 Strata.dmg Strata.zip > SHA256SUMS.txt && cat SHA256SUMS.txt)
+          ditto -c -k --keepParent "$APP" dist/Fileer.zip
+          (cd dist && shasum -a 256 Fileer.dmg Fileer.zip > SHA256SUMS.txt && cat SHA256SUMS.txt)
           ls -lh dist
 
       # The update window shows these notes: HTML from GitHub's Markdown renderer, which also sanitizes it.
       - name: Render the release notes for the update window
-        if: env.RELEASE_TAG != '' && env.HAS_APPLE_SIGNING == 'true'
+        if: env.RELEASE_TAG != ''
         env:
           GH_TOKEN: ${{ github.token }}
           VERSION: ${{ steps.version.outputs.version }}
@@ -262,7 +263,7 @@ jobs:
           fi
 
       - name: Sign the update and write the appcast
-        if: env.RELEASE_TAG != '' && env.HAS_APPLE_SIGNING == 'true'
+        if: env.RELEASE_TAG != ''
         env:
           UPDATE_KEY: ${{ secrets.SPARKLE_ED_PRIVATE_KEY }}
           VERSION: ${{ steps.version.outputs.version }}
@@ -281,10 +282,10 @@ jobs:
           printf '%s' "$UPDATE_KEY" > "$key"
           trap 'rm -f "$key"' EXIT
           # The zip: its signature and length go into the appcast.
-          attributes=$("$tools/bin/sign_update" --ed-key-file "$key" dist/Strata.zip)
+          attributes=$("$tools/bin/sign_update" --ed-key-file "$key" dist/Fileer.zip)
           [[ "$attributes" =~ ^sparkle:edSignature=\"[A-Za-z0-9+/=]+\"\ length=\"[0-9]+\"$ ]] || { echo "::error::unexpected sign_update output"; exit 1; }
-          build=$(/usr/libexec/PlistBuddy -c 'Print :CFBundleVersion' build/Strata.app/Contents/Info.plist)
-          minimum=$(/usr/libexec/PlistBuddy -c 'Print :LSMinimumSystemVersion' build/Strata.app/Contents/Info.plist)
+          build=$(/usr/libexec/PlistBuddy -c 'Print :CFBundleVersion' build/Fileer.app/Contents/Info.plist)
+          minimum=$(/usr/libexec/PlistBuddy -c 'Print :LSMinimumSystemVersion' build/Fileer.app/Contents/Info.plist)
           date=$(LC_ALL=C date -u '+%a, %d %b %Y %H:%M:%S +0000')
           # The notes in the update window, or else a link to the release page.
           if [ -s "$RUNNER_TEMP/notes.html" ]; then
@@ -296,15 +297,15 @@ jobs:
           <?xml version="1.0" encoding="utf-8"?>
           <rss version="2.0" xmlns:sparkle="http://www.andymatuschak.org/xml-namespaces/sparkle">
             <channel>
-              <title>Strata</title>
+              <title>Fileer</title>
               <item>
-                <title>Strata $VERSION</title>
+                <title>Fileer $VERSION</title>
                 <pubDate>$date</pubDate>
                 <sparkle:version>$build</sparkle:version>
                 <sparkle:shortVersionString>$VERSION</sparkle:shortVersionString>
                 <sparkle:minimumSystemVersion>$minimum</sparkle:minimumSystemVersion>
                 $notes
-                <enclosure url="https://github.com/$REPOSITORY/releases/download/$TAG/Strata.zip" $attributes type="application/octet-stream"/>
+                <enclosure url="https://github.com/$REPOSITORY/releases/download/$TAG/Fileer.zip" $attributes type="application/octet-stream"/>
               </item>
             </channel>
           </rss>
@@ -362,6 +363,6 @@ jobs:
           if [ "$PRERELEASE" = true ]; then flags+=(--prerelease); fi
           notes="docs/release-notes/$VERSION.md"
           if [ -f "$notes" ]; then flags+=(--notes-file "$notes"); else flags+=(--generate-notes); fi
-          assets=(dist/Strata.dmg dist/Strata.zip dist/SHA256SUMS.txt)
+          assets=(dist/Fileer.dmg dist/Fileer.zip dist/SHA256SUMS.txt)
           if [ -f dist/appcast.xml ]; then assets+=(dist/appcast.xml); fi
-          gh release create "$TAG" "${assets[@]}" --repo "$GITHUB_REPOSITORY" --title "Strata $VERSION" --verify-tag "${flags[@]}"
+          gh release create "$TAG" "${assets[@]}" --repo "$GITHUB_REPOSITORY" --title "Fileer $VERSION" --verify-tag "${flags[@]}"

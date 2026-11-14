@@ -46,7 +46,7 @@ enum SettingsCatalog {
         entry(.updates, .general, "Updates", "automatic updates download release"),
         entry(.verifyCopies, .general, "Verify copies", "verify copies checksum integrity copying"),
         entry(.dockSearch, .general, "Search box in the Dock", "dock search accessibility"),
-        entry(.defaultFileBrowser, .general, "Open “Reveal in Finder” in Strata", "default file browser reveal finder"),
+        entry(.defaultFileBrowser, .general, "Open “Reveal in Finder” in Fileer", "default file browser reveal finder"),
         entry(.commandLine, .general, "Command Line", "cli shell command line install strata"),
         entry(.rebuildIndex, .search, "Rebuild Index", "index rebuild search database"),
         entry(.fullDiskAccess, .search, "Full Disk Access", "privacy permissions full disk access search"),

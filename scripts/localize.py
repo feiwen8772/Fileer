@@ -170,7 +170,7 @@ def extract():
     with tempfile.TemporaryDirectory() as scratch:
         out = Path(scratch) / "strings"
         out.mkdir()
-        command = ["swift", "build", "--product", "Strata", "--scratch-path", str(Path(scratch) / "build"),
+        command = ["swift", "build", "--product", "Fileer", "--scratch-path", str(Path(scratch) / "build"),
                    "-Xswiftc", "-emit-localized-strings", "-Xswiftc", "-emit-localized-strings-path", "-Xswiftc", str(out)]
         print("Building to find every string (a minute or two)…", file=sys.stderr)
         result = subprocess.run(command, cwd=ROOT, capture_output=True, text=True)

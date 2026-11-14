@@ -188,7 +188,7 @@ final class AppUpdatesController: NSViewController {
             summary.stringValue = count == 1 ? String(localized: "It’s up to date.", comment: "App Updates: the one app checked is up to date")
                 : String(localized: "They’re all up to date.", comment: "App Updates: every app checked is up to date")
         } else if checked > 0 {
-            summary.stringValue = String(localized: "No updates for the \(checked) apps Strata could check.", comment: "plural; App Updates: others couldn't be checked")
+            summary.stringValue = String(localized: "No updates for the \(checked) apps Fileer could check.", comment: "plural; App Updates: others couldn't be checked")
         } else {
             // Nothing Strata could check itself: each row says how that app is updated.
             summary.stringValue = ""
@@ -371,7 +371,7 @@ private final class AppUpdateRow: NSView {
             })
         case .itself(let hasSparkle):
             set(hasSparkle ? String(localized: "Has its own updater: open it and choose Check for Updates.", comment: "App Updates: the app updates itself with Sparkle, set up in its code")
-                    : String(localized: "Strata can’t tell how it’s updated.", comment: "App Updates: no update feed or updater Strata recognizes"),
+                    : String(localized: "Fileer can’t tell how it’s updated.", comment: "App Updates: no update feed or updater Strata recognizes"),
                 "arrow.triangle.2.circlepath", .secondaryLabelColor)
             button = openApp
         case .failed(let message):
