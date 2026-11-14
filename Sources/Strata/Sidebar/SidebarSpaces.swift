@@ -86,6 +86,11 @@ final class SidebarSpaces {
     }
 }
 
+/// Use the same physical center on AppKit 26 and 27, whose borderless button alignment insets differ.
+final class SidebarFooterButton: NSButton {
+    override var alignmentRectInsets: NSEdgeInsets { NSEdgeInsets() }
+}
+
 extension SidebarViewController {
     var activeSpace: SidebarSpace? { services.sidebarSpaces.space(activeSpaceID) }
 
@@ -102,11 +107,11 @@ extension SidebarViewController {
         spaceTitle.addCategory.target = self
         spaceTitle.addCategory.action = #selector(newCategoryFromTitle(_:))
         spaceTitle.onMenu = { [weak self] in self?.spaceTitleMenu() }
-        let menu = NSButton(image: NSImage(systemSymbolName: "keyboard", accessibilityDescription: String(localized: "Keyboard Shortcuts")) ?? NSImage(), target: nil, action: #selector(AppDelegate.showShortcuts(_:)))
+        let menu = SidebarFooterButton(image: NSImage(systemSymbolName: "keyboard", accessibilityDescription: String(localized: "Keyboard Shortcuts")) ?? NSImage(), target: nil, action: #selector(AppDelegate.showShortcuts(_:)))
         menu.title = ""
         menu.imagePosition = .imageOnly
         menu.toolTip = String(localized: "Every shortcut in Fileer (⌘/)")
-        let add = NSButton(image: NSImage(systemSymbolName: "plus", accessibilityDescription: nil) ?? NSImage(),
+        let add = SidebarFooterButton(image: NSImage(systemSymbolName: "plus", accessibilityDescription: nil) ?? NSImage(),
                            target: self, action: #selector(newSidebarSpace(_:)))
         for button in [menu, add] {
             button.imagePosition = .imageOnly
@@ -174,7 +179,7 @@ extension SidebarViewController {
             for child in spaceDots.arrangedSubviews { spaceDots.removeArrangedSubview(child); child.removeFromSuperview() }
             for (index, identifier) in identifiers.enumerated() {
                 let image = NSImage(systemSymbolName: "circle.fill", accessibilityDescription: nil) ?? NSImage()
-                let dot = NSButton(image: image, target: self, action: #selector(spacePicked(_:)))
+                let dot = SidebarFooterButton(image: image, target: self, action: #selector(spacePicked(_:)))
                 dot.imagePosition = .imageOnly
                 dot.isBordered = false
                 dot.tag = index

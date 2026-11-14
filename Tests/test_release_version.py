@@ -23,6 +23,19 @@ def version_script():
 
 
 class ReleaseVersionTests(unittest.TestCase):
+    def test_packaging_waits_for_all_suites_and_uses_their_immutable_source(self):
+        workflow = (ROOT / '.github/workflows/release.yml').read_text()
+        checks = workflow.split('  regressions:\n', 1)[1].split('  build:\n', 1)[0]
+        packaging = workflow.split('  build:\n', 1)[1].split('  release:\n', 1)[0]
+        self.assertIn('suite: [normal, optimized, address]', checks)
+        self.assertIn('fail-fast: false', checks)
+        self.assertIn('needs: [source, regressions]', packaging)
+        for section in [checks, packaging]:
+            self.assertIn('ref: ${{ needs.source.outputs.sha }}', section)
+        self.assertIn('-- swift test --no-parallel', checks)
+        self.assertIn('-- swift test -c release --no-parallel', checks)
+        self.assertIn('-- swift test --no-parallel --sanitize address', checks)
+
     def setUp(self):
         temporary = tempfile.TemporaryDirectory()
         self.addCleanup(temporary.cleanup)

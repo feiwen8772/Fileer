@@ -56,7 +56,61 @@ env:
   SPARKLE_SHA256: "c2bf58aa8387266ac179357b1415d6f2635f044da8be41042af32425dae6da0c"
 
 jobs:
+  source:
+    runs-on: ubuntu-latest
+    outputs:
+      sha: ${{ steps.source.outputs.sha }}
+    steps:
+      - name: Resolve the release source once
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+          ref: ${{ env.RELEASE_TAG && format('refs/tags/{0}', env.RELEASE_TAG) || github.sha }}
+      - id: source
+        run: echo "sha=$(git rev-parse HEAD)" >> "$GITHUB_OUTPUT"
+
+  regressions:
+    name: Regressions (${{ matrix.suite }})
+    needs: source
+    runs-on: macos-26
+    timeout-minutes: 90
+    strategy:
+      fail-fast: false
+      matrix:
+        suite: [normal, optimized, address]
+    steps:
+      - name: Checkout the exact source being tested and packaged
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+          ref: ${{ needs.source.outputs.sha }}
+      - name: Select Xcode
+        run: sudo xcode-select -s "/Applications/Xcode_${XCODE_VERSION}.app"
+      - name: Resolve pinned test dependencies
+        run: swift package resolve
+      # Each suite has its own VM and Trash. No debug/sanitizer runners share a filesystem.
+      - name: Run all app regressions before signing
+        if: matrix.suite == 'normal'
+        run: python3 scripts/run-test-check.py --output-directory "$RUNNER_TEMP/strata-test-diagnostics/normal" -- swift test --no-parallel
+      - name: Run optimized app regressions before signing
+        if: matrix.suite == 'optimized'
+        run: python3 scripts/run-test-check.py --output-directory "$RUNNER_TEMP/strata-test-diagnostics/release" -- swift test -c release --no-parallel --disable-automatic-resolution --jobs 4
+      - name: Run memory safety checks before signing
+        if: matrix.suite == 'address'
+        env:
+          ASAN_OPTIONS: handle_abort=1
+        run: python3 scripts/run-test-check.py --output-directory "$RUNNER_TEMP/strata-test-diagnostics/address" -- swift test --no-parallel --sanitize address --scratch-path .build/sanitizers/address --disable-automatic-resolution --jobs 4
+      - name: Preserve test diagnostics
+        if: always()
+        uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
+        with:
+          name: release-test-diagnostics-${{ matrix.suite }}-${{ github.run_attempt }}
+          path: ${{ runner.temp }}/strata-test-diagnostics/
+          retention-days: 3
+          if-no-files-found: ignore
+
   build:
+    needs: [source, regressions]
     runs-on: macos-26
     # Normal, optimized and sanitizer suites all finish before signing and notarization begin.
     timeout-minutes: 180
@@ -71,7 +125,7 @@ jobs:
         uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
           persist-credentials: false
-          ref: ${{ env.RELEASE_TAG && format('refs/tags/{0}', env.RELEASE_TAG) || github.sha }}
+          ref: ${{ needs.source.outputs.sha }}
 
       - name: Refuse to release an unsigned build
         if: env.RELEASE_TAG != '' && env.HAS_APPLE_SIGNING != 'true' && (vars.FILEER_ALLOW_ADHOC_RELEASE != 'true' || env.RELEASE_TAG != 'v0.1')
@@ -96,26 +150,6 @@ jobs:
             exit 1
           fi
           python3 scripts/localize.py check --all --complete
-
-      - name: Run all app regressions before signing
-        run: python3 scripts/run-test-check.py --output-directory "$RUNNER_TEMP/strata-test-diagnostics/normal" -- swift test --no-parallel
-
-      - name: Run optimized app regressions before signing
-        run: python3 scripts/run-test-check.py --output-directory "$RUNNER_TEMP/strata-test-diagnostics/release" -- swift test -c release --no-parallel --disable-automatic-resolution --jobs 4
-
-      - name: Run memory safety checks before signing
-        env:
-          ASAN_OPTIONS: handle_abort=1
-        run: python3 scripts/run-test-check.py --output-directory "$RUNNER_TEMP/strata-test-diagnostics/address" -- swift test --no-parallel --sanitize address --scratch-path .build/sanitizers/address --disable-automatic-resolution --jobs 4
-
-      - name: Preserve test diagnostics
-        if: always()
-        uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
-        with:
-          name: release-test-diagnostics-${{ github.run_attempt }}
-          path: ${{ runner.temp }}/strata-test-diagnostics/
-          retention-days: 3
-          if-no-files-found: ignore
 
       - name: Work out the version
         id: version
