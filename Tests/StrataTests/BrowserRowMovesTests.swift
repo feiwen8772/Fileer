@@ -55,6 +55,7 @@ import Testing
     @Test(arguments: [BrowserViewMode.list, .grid, .gallery])
     func largeNativeResortsKeepExpandedFoldersAndTheExactSelection(_ mode: BrowserViewMode) async throws {
         let environment = try IndependentEnvironment(), tree = try TestTree()
+        environment.services.preferences.foldersFirst = true
         let browser = BrowserViewController(services: environment.services)
         let window = NSWindow(contentRect: NSRect(x: 0, y: 0, width: 1000, height: 700),
             styleMask: .titled, backing: .buffered, defer: false)

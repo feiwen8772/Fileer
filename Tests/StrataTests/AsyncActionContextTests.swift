@@ -487,6 +487,7 @@ struct AsyncActionContextTests {
         // Activate Columns and Gallery in the second pane so both presentations are cached and populated.
         secondPane.browser.setMode(.columns, remember: false)
         let columns = try #require(secondPane.browser.columnController)
+        columns.showsFilePreview = true
         columns.select([tree.url("root/a.txt")], scroll: false)
         #expect(columns.preview != nil)
 

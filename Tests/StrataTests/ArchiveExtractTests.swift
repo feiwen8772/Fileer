@@ -220,7 +220,7 @@ struct ArchiveExtractTests {
         ]
         let tree = try TestTree("out/")
         let archive = try await tarWithMetadata(overlapping, for: "file", in: tree)
-        await #expect(throws: Archiver.Failure(message: "“crafted.tar” goes past the limits Strata sets for reading archives, so it wasn’t extracted.")) {
+        await #expect(throws: Archiver.Failure(message: "“crafted.tar” goes past the limits Fileer sets for reading archives, so it wasn’t extracted.")) {
             _ = try await extract(archive, into: tree.url("out"))
         }
         #expect(tree.snapshot().filter { $0.hasPrefix("out") } == ["out/"])
@@ -263,7 +263,7 @@ struct ArchiveExtractTests {
         try FileManager.default.createDirectory(at: tree.url("payload/\(deep)"), withIntermediateDirectories: true)
         try Data("deep".utf8).write(to: tree.url("payload/\(deep)/file"))
         try await tar(["-cf", "../deep.tar", "d"], in: tree.url("payload"))
-        await #expect(throws: Archiver.Failure(message: "“deep.tar” goes past the limits Strata sets for reading archives, so it wasn’t extracted.")) {
+        await #expect(throws: Archiver.Failure(message: "“deep.tar” goes past the limits Fileer sets for reading archives, so it wasn’t extracted.")) {
             _ = try await extract(tree.url("deep.tar"), into: tree.url("out"))
         }
         #expect(tree.snapshot().filter { $0.hasPrefix("out") } == ["out/"])

@@ -24,14 +24,18 @@ struct AppIconTests {
         }
     }
 
-    @Test func fallbackHasEveryMacIconSizeAndTheBundleNamesTheAdaptiveIcon() throws {
+    @Test func legacyFallbackHasEveryMacIconSizeAndTheBundleNamesFileerArtwork() throws {
         let fallback = try #require(NSImage(contentsOf: resources.appending(path: "AppIcon.icns")))
         #expect(fallback.isValid)
         #expect(Set(fallback.representations.map(\.pixelsWide)) == [16, 32, 64, 128, 256, 512, 1024])
         #expect(fallback.representations.allSatisfy { $0.pixelsWide == $0.pixelsHigh })
         let info = try #require(try PropertyListSerialization.propertyList(
             from: Data(contentsOf: resources.appending(path: "Info.plist")), format: nil) as? [String: Any])
-        #expect(info["CFBundleIconName"] as? String == "AppIcon")
-        #expect(info["CFBundleIconFile"] as? String == "AppIcon")
+        let artwork = try #require(NSImage(contentsOf: resources.appending(path: "FileerIcon.png")))
+        #expect(artwork.isValid)
+        #expect(artwork.representations.allSatisfy { $0.pixelsWide == $0.pixelsHigh && $0.hasAlpha })
+        #expect(info["CFBundleName"] as? String == "Fileer")
+        #expect(info["CFBundleIconName"] as? String == "FileerIcon")
+        #expect(info["CFBundleIconFile"] as? String == "FileerIcon")
     }
 }

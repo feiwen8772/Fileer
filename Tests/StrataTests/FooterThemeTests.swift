@@ -21,7 +21,6 @@ extension ColorThemeTests {
                               styleMask: [.titled, .resizable, .fullSizeContentView], backing: .buffered, defer: false)
         window.contentViewController = split
         defer { window.contentViewController = nil }
-        let sidebarFooter = try #require(split.splitViewItems[0].bottomAlignedAccessoryViewControllers.first)
         let main = split.splitViewItems[1].viewController.view
         let canvas = try #require(main.subviews.compactMap { $0 as? ThemeSurfaceView }.first)
         let footerFill = try #require(split.status.view.subviews.compactMap { $0 as? ThemeSurfaceView }.first)
@@ -40,7 +39,7 @@ extension ColorThemeTests {
                     ThemeStyle.apply(ColorThemeOptions(palette: palette), windows: [window], highContrast: false)
                     await withCheckedContinuation { done in DispatchQueue.main.async { done.resume() } }
                     window.contentView?.layoutSubtreeIfNeeded()
-                    for footer in [split.status, sidebarFooter] where !footer.isHidden {
+                    for footer in [split.status] where !footer.isHidden {
                         #expect(footer.automaticallyAppliesContentInsets, "Keep Finder’s native accessory spacing.")
                         let parent = try #require(footer.view.superview)
                         #expect(footer.view.frame.width < parent.bounds.width && footer.view.frame.height < parent.bounds.height)

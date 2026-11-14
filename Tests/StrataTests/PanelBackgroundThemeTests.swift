@@ -57,8 +57,13 @@ extension ColorThemeTests {
                         root.layoutSubtreeIfNeeded()
                         ToolbarThemeController.apply(to: window)
                         #expect(mainItem.automaticallyAdjustsSafeAreaInsets)
-                        #expect(main.convert(main.bounds, to: split.view) == split.view.bounds,
-                                "The same file canvas must extend underneath both native panels, including their exposed corners.")
+                        // AppKit 27 can keep the main view inside the sidebar even with automatic safe-area
+                        // adjustment. Its canvas must cover every file; the window paints exposed panel corners.
+                        let canvasRect = main.convert(main.bounds, to: split.view)
+                        let filesRect = split.panes.view.convert(split.panes.view.bounds, to: split.view)
+                        #expect(canvasRect.contains(filesRect))
+                        #expect(try chromeColorPixel(window.backgroundColor, appearance: window.effectiveAppearance)
+                                == chromeColorPixel(ThemeStyle.surface(.content), appearance: window.effectiveAppearance))
                         #expect(canvas.frame == main.bounds && !canvas.isHidden)
                         #expect(split.panes.view.convert(split.panes.view.bounds, to: root) == files)
                         #expect(split.status.view.convert(split.status.view.bounds, to: root) == status)

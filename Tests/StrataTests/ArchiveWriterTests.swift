@@ -321,7 +321,7 @@ struct ArchiveWriterTests {
         #expect(Archiver.failure(complete: false, status: .password, archive: archive)
             == Archiver.Failure(message: ArchiveReadError.passwordProtected("photos.zip")))
         #expect(Archiver.failure(complete: false, status: .limit, archive: archive)
-            == Archiver.Failure(message: "“photos.zip” goes past the limits Strata sets for reading archives, so it wasn’t extracted."))
+            == Archiver.Failure(message: "“photos.zip” goes past the limits Fileer sets for reading archives, so it wasn’t extracted."))
         #expect(Archiver.failure(complete: false, status: .unsafe, archive: archive)
             == Archiver.Failure(message: ArchiveReadError.unsafe.localizedDescription))
     }

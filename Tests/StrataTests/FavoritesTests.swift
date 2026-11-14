@@ -80,6 +80,7 @@ import Testing
         services.visits.record(tree.url("often"))
         let sidebar = SidebarViewController(services: services)
         _ = sidebar.view
+        await services.places.task?.value
         await sidebar.cloudRead?.value
         sidebar.reload()
         let outline = sidebar.outline
@@ -108,8 +109,8 @@ import Testing
         for _ in 0..<200 where preferences.favoritePaths?.count != 3 { try await Task.sleep(for: .milliseconds(10)) }
         #expect(preferences.favoritePaths?.map { URL(filePath: $0).lastPathComponent } == ["a", "often", "b"])
         sidebar.reload()
-        // It was the only frequent folder, so the section goes.
-        #expect(sidebar.sections.first { $0.id == "frequent" } == nil)
+        // Keep the built-in category available in every space after its last item leaves.
+        #expect(sidebar.sections.first { $0.id == "frequent" }?.items.isEmpty == true)
         #expect(try section("locations").items.allSatisfy { $0.url?.path != folder.path })
         #expect(tree.snapshot().filter { !$0.hasPrefix("environment/") } == ["a/", "b/", "often/"])
     }
@@ -122,6 +123,7 @@ import Testing
         environment.preferences.favoritePaths = []
         let sidebar = SidebarViewController(services: environment.services)
         _ = sidebar.view
+        await environment.services.places.task?.value
         await sidebar.cloudRead?.value
         let locations = try #require(sidebar.sections.first { $0.id == "locations" })
         let plainFolder = try #require(locations.items.first { $0.url?.path == folder.path })
@@ -158,7 +160,7 @@ import Testing
         }
         #expect(Set(frequent()) == ["often", "also"])
         let often = try #require(sidebar.sections.first { $0.id == "frequent" }?.items.first { $0.url?.lastPathComponent == "often" })
-        let recents = try #require(sidebar.sections.first?.items.first)
+        let recents = try #require(sidebar.sections.first { $0.id == "favorites" }?.items.first { $0.target == .recents })
         #expect(sidebar.isFrequent(often) && !sidebar.isFrequent(recents))
         let entry = NSMenuItem()
         entry.representedObject = often.url

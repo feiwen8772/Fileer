@@ -23,8 +23,7 @@ extension ColorThemeTests {
         defer { window.contentViewController = nil }
         split.scopeBar.isHidden = false
         split.noticeBar.isHidden = false
-        let sidebarFooter = try #require(split.splitViewItems[0].bottomAlignedAccessoryViewControllers.first)
-        let accessories = [split.status, split.scopeBar, split.noticeBar, sidebarFooter]
+        let accessories = [split.status, split.scopeBar, split.noticeBar]
         for name in [NSAppearance.Name.aqua, .darkAqua] {
             window.appearance = NSAppearance(named: name)
             for size in [NSSize(width: 1240, height: 780), NSSize(width: 900, height: 600)] {
@@ -41,7 +40,7 @@ extension ColorThemeTests {
                         #expect(canvas.frame == padding.bounds && !canvas.bounds.isEmpty)
                         #expect(view.frame.width < padding.bounds.width && view.frame.height < padding.bounds.height)
                         #expect(canvas.isHidden == (palette == .system))
-                        #expect(canvas.role == (accessory === sidebarFooter ? .sidebar : .content))
+                        #expect(canvas.role == .content)
                         #expect(canvas.hitTest(.zero) == nil)
                         if palette != .system {
                             for point in [NSPoint(x: 2, y: 2), NSPoint(x: padding.bounds.maxX - 2, y: padding.bounds.maxY - 2)] {
